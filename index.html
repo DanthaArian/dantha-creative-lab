@@ -532,18 +532,12 @@
                 // Animasi Orbit Dinamis: Launch -> Top Right -> Bottom Right -> Bottom Left -> Top Left -> Home
                 tl.to(rocket, { 
                     scale: 1.5, duration: 0.3, ease: "back.out" 
-                // Animasi Orbit 3D (Membelakangi Kotak)
-                tl.to(rocket, {
-                    scale: 2, y: -30, duration: 0.4, ease: "power2.out"
                 })
                 .to(rocket, {
                     x: w + 100, y: -h - 100, rotation: 45, duration: 0.8, ease: "power2.inOut"
-                    x: 400, y: -120, rotation: 30, scale: 0.3, opacity: 0, duration: 0.7, ease: "power2.in",
-                    onStart: () => gsap.set(rocket, { zIndex: -1 }) // Pindah ke belakang background layer
                 })
                 .to(rocket, {
                     x: w + 100, y: h + 100, rotation: 135, duration: 0.8, ease: "none"
-                    x: -400, duration: 0.4, ease: "none" // Bergerak di belakang saat tidak terlihat
                 })
                 .to(rocket, {
                     x: -w - 100, y: h + 100, rotation: 225, duration: 1, ease: "none"
@@ -553,8 +547,6 @@
                 })
                 .to(rocket, {
                     x: 0, y: 0, rotation: 360, scale: 1, duration: 0.8, ease: "power2.out",
-                    x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)",
-                    onStart: () => gsap.set(rocket, { zIndex: 20 }), // Kembali ke depan konten
                     onComplete: () => {
                         rocket.classList.remove('rocket-launching');
                         gsap.set(rocket, { rotation: 0 });
