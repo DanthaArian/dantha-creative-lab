@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dantha Creative Lab | Digital Reality Agency</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- GSAP for Professional Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="bg-[#030305] text-white overflow-x-hidden font-['Sora'] selection:bg-blue-500/30 transition-colors duration-500" data-theme="dark" data-lang="id">
+
+    <!-- Interactive Cursor Glow -->
+    <div id="cursor-glow" class="fixed w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none z-[1] transition-opacity duration-500 opacity-0"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-[999] bg-black flex items-center justify-center">
+        <img src="logo dantha creative.png" alt="Dantha Logo" class="h-20 w-auto animate-pulse object-contain rounded-2xl">
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-[100] transition-all duration-300 py-3 bg-black/50 backdrop-blur-lg border-b border-white/10" id="main-nav">
+        <div class="container mx-auto px-6 py-2 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 logo-link group relative z-10">
+                <img src="logo dantha creative.png" alt="Dantha Logo" class="h-8 md:h-9 w-auto object-contain logo-img rounded-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                <div class="text-xl md:text-2xl font-black tracking-tighter">
+                    <span class="gradient-text">DANTHA</span><span class="logo-dot text-white">.</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center space-x-6 font-medium">
+                <a href="#home" class="nav-link active" data-key="nav_home">Home</a>
+                <a href="#services" class="nav-link" data-key="nav_services">Services</a>
+                <a href="#portfolio" class="nav-link" data-key="nav_portfolio">Portfolio</a>
+                <a href="#contact" class="btn-primary-sm" data-key="nav_get_started">Get Started</a>
+                <div class="flex items-center space-x-2">
+                    <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="lang-toggle" class="px-3 py-1 rounded-full text-sm font-bold text-slate-400 hover:text-white hover:bg-white/10 transition-colors uppercase">ID</button>
+                </div>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <div class="flex md:hidden items-center space-x-4">
+                <button id="lang-toggle-mobile" class="text-xs font-bold text-slate-400 uppercase">ID</button>
+                <button id="theme-toggle-mobile" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="menu-toggle" class="text-white text-2xl focus:outline-none">
+                    <i class="fas fa-bars dark:text-white text-slate-900"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/10 p-6 flex flex-col space-y-4 text-center">
+            <a href="#home" class="nav-link-mobile" data-key="nav_home">Home</a>
+            <a href="#services" class="nav-link-mobile" data-key="nav_services">Services</a>
+            <a href="#portfolio" class="nav-link-mobile" data-key="nav_portfolio">Portfolio</a>
+            <a href="#contact" class="btn-primary-sm mx-auto" data-key="nav_get_started">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Smooth Scroll Container -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+        
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
+            <!-- Modern Background Elements -->
+            <div class="absolute inset-0 z-0">
+                <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-blob"></div>
+                <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] animate-blob animation-delay-2000"></div>
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                <div class="hero-grid absolute -inset-[10%] opacity-[0.03] pointer-events-none"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 text-center z-10 hero-text relative">
+                <h1 class="text-4xl md:text-6xl lg:text-[90px] font-extrabold tracking-tighter mb-6 leading-[1.1] lg:leading-[1] opacity-0 translate-y-10">
+                    <span data-key="hero_headline_prefix">Helping Small Brands</span><br>
+                    <span class="gradient-text" id="typing-text">Look Big Online</span>
+                </h1>
+                <p class="text-lg lg:text-xl text-slate-300 max-w-3xl mx-auto mb-10 opacity-0 translate-y-10 font-medium" data-key="hero_subheadline">
+                    Kami membantu UMKM & personal brand tampil profesional lewat desain, video, dan website — cepat, simpel, dan ramah di kantong.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 opacity-0 translate-y-10">
+                    <a href="https://wa.me/62856092015193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
+                        <span data-key="hero_cta_consult">Konsultasi Gratis</span>
+                    </a>
+                    <a href="#services" class="btn-outline-lg w-full sm:w-auto magnetic-button">
+                        <span data-key="hero_cta_services">Lihat Layanan</span>
+                    </a>
+                </div>
+                
+                <p class="mt-6 text-slate-500 text-sm font-medium opacity-0 translate-y-10" data-key="hero_microcopy">
+                    Mulai dari <span class="text-white">50K</span> • Tanpa ribet • Bisa via WhatsApp
+                </p>
+
+                <!-- Trust Indicators -->
+                <div class="trust-badges mt-16 flex flex-wrap justify-center gap-3 opacity-0 translate-y-10">
+                    <span class="px-4 py-2 bg-white/5 rounded-full border border-white/10 text-[10px] lg:text-xs font-bold text-slate-400 uppercase tracking-widest" data-key="trust_since">
+                        Dipercaya UMKM & personal brand sejak 2026
+                    </span>
+                    <div class="flex gap-3">
+                        <span class="px-4 py-2 bg-blue-500/10 rounded-full border border-blue-500/20 text-[10px] lg:text-xs font-bold text-blue-400" data-key="trust_price">
+                            Harga Transparan
+                        </span>
+                        <span class="px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20 text-[10px] lg:text-xs font-bold text-purple-400" data-key="trust_process">
+                            Proses Cepat
+                        </span>
+                        <span class="px-4 py-2 bg-green-500/10 rounded-full border border-green-500/20 text-[10px] lg:text-xs font-bold text-green-400" data-key="trust_support">
+                            Support Friendly
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="relative z-20 bg-[#020202] py-20 md:py-32 px-6">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div class="max-w-xl text-center md:text-left reveal-item" data-key="services_intro">
+                        <h2 class="text-5xl font-bold mb-6">Our Creative <span class="text-blue-600">Power.</span></h2>
+                        <p class="text-slate-400">Kami menawarkan eksekusi teknis terbaik untuk memastikan brand Anda tampil menonjol di dunia digital.</p>
+                    </div>
+                    <div class="text-slate-500 font-bold tracking-widest uppercase" data-key="services_tag">/ Jasa & Harga</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Jasa 1 -->
+                    <div class="service-card reveal-item p-10 rounded-[40px] bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-600/20 flex items-center justify-center mb-8 text-blue-500 text-3xl group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500"><i class="fas fa-palette"></i></div>
+                        <h3 class="text-xl font-bold mb-2" data-key="service_graphic_title">Graphic Design</h3>
+                        <p class="text-slate-400 text-sm mb-6" data-key="service_graphic_desc">Logo, branding, dan aset media sosial profesional.</p>
+                        <div class="text-2xl font-black">Rp 50k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
+                    </div>
+                    <div class="service-card reveal-item p-10 rounded-[40px] bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                        <div class="w-16 h-16 rounded-2xl bg-purple-600/20 flex items-center justify-center mb-8 text-purple-500 text-3xl group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all duration-500"><i class="fas fa-video"></i></div>
+                        <h3 class="text-xl font-bold mb-2" data-key="service_video_title">Video Editing</h3>
+                        <p class="text-slate-400 text-sm mb-6" data-key="service_video_desc">Cinematic edit, Reels, dan video promosi premium.</p>
+                        <div class="text-2xl font-black">Rp 100k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
+                    </div>
+                    <div class="service-card reveal-item p-10 rounded-[40px] bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                        <div class="w-16 h-16 rounded-2xl bg-cyan-600/20 flex items-center justify-center mb-8 text-cyan-500 text-3xl group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-500"><i class="fas fa-laptop-code"></i></div>
+                        <h3 class="text-xl font-bold mb-2" data-key="service_simple_web_title">Simple Website</h3>
+                        <p class="text-slate-400 text-sm mb-6" data-key="service_simple_web_desc">Landing page responsif dan cepat untuk bisnis kecil.</p>
+                        <div class="text-2xl font-black">Rp 600k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
+                    </div>
+                    <div class="service-card reveal-item p-10 rounded-[40px] bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                        <div class="w-16 h-16 rounded-2xl bg-green-600/20 flex items-center justify-center mb-8 text-green-500 text-3xl group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white transition-all duration-500"><i class="fas fa-rocket"></i></div>
+                        <h3 class="text-xl font-bold mb-2" data-key="service_complex_web_title">Complex Web</h3>
+                        <p class="text-slate-400 text-sm mb-6" data-key="service_complex_web_desc">E-commerce & sistem web kustom skala besar.</p>
+                        <div class="text-2xl font-black">Rp 2 Juta<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section id="why-us" class="py-20 md:py-32 bg-white/5">
+            <div class="container mx-auto px-6">
+                <h2 class="text-center text-3xl font-bold mb-16" data-key="why_us_title">Why Dantha Lab?</h2>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+                    <div class="reveal-item">
+                        <i class="fas fa-bolt text-2xl text-yellow-400 mb-4"></i>
+                        <p class="text-sm font-bold" data-key="why_us_fast_response">Fast Response</p>
+                    </div>
+                    <div class="reveal-item">
+                        <i class="fas fa-tags text-2xl text-green-400 mb-4"></i>
+                        <p class="text-sm font-bold" data-key="why_us_affordable">Affordable</p>
+                    </div>
+                    <div class="reveal-item">
+                        <i class="fas fa-gem text-2xl text-blue-400 mb-4"></i>
+                        <p class="text-sm font-bold" data-key="why_us_modern_design">Modern Design</p>
+                    </div>
+                    <div class="reveal-item">
+                        <i class="fas fa-heart text-2xl text-red-400 mb-4"></i>
+                        <p class="text-sm font-bold" data-key="why_us_client_oriented">Client Oriented</p>
+                    </div>
+                    <div class="reveal-item">
+                        <i class="fas fa-clock text-2xl text-purple-400 mb-4"></i>
+                        <p class="text-sm font-bold" data-key="why_us_on_time">On Time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Preview -->
+        <section id="portfolio" class="py-20 md:py-32 px-6">
+            <div class="container mx-auto px-6">
+                <h2 class="text-5xl font-bold mb-16" data-key="portfolio_title">Selected <span class="text-blue-600">Work.</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="group cursor-pointer overflow-hidden rounded-3xl reveal-item">
+                        <div class="relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="px-6 py-2 bg-white text-black font-bold rounded-full" data-key="portfolio_view_project">View Project</span>
+                            </div>
+                        </div>
+                        <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_alpha_title">Project Alpha Branding</h3>
+                        <p class="text-slate-500" data-key="portfolio_project_alpha_tag">Design / 2026</p>
+                    </div>
+                    <div class="group cursor-pointer overflow-hidden rounded-3xl reveal-item">
+                        <div class="relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="px-6 py-2 bg-white text-black font-bold rounded-full" data-key="portfolio_view_project">View Project</span>
+                            </div>
+                        </div>
+                        <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_nexus_title">Nexus SaaS Platform</h3>
+                        <p class="text-slate-500" data-key="portfolio_project_nexus_tag">Website / 2026</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 md:py-32 px-6">
+            <div class="container mx-auto px-6 bg-gradient-to-br from-blue-600 to-purple-800 rounded-[40px] md:rounded-[60px] p-10 lg:p-24 text-center relative">
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
+                <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
+                    <a href="https://wa.me/62856092015193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
+                    <div class="text-left">
+                        <p class="text-white/70 text-sm uppercase font-bold tracking-widest" data-key="contact_follow_us">Follow Us</p>
+                        <a href="#" class="text-2xl font-bold">@danthacreative</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-12 border-t border-white/5 text-center text-slate-500 text-sm" data-key="footer_copyright">
+            <p>&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED.</p>
+        </footer>
+
+        </div>
+    </div>
+
+    <!-- Quick Contact Floating Buttons -->
+    <div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
+        <a href="https://instagram.com/danthacreative" target="_blank" class="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+            <i class="fab fa-instagram text-2xl text-white"></i>
+            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@danthacreative</span>
+        </a>
+        <a href="https://wa.me/62856092015193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+            <i class="fab fa-whatsapp text-3xl text-white"></i>
+            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Chat via WhatsApp</span>
+        </a>
+    </div>
+
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        const translations = {
+            id: {
+                nav_home: "Beranda", nav_services: "Layanan", nav_portfolio: "Portofolio", nav_get_started: "Mulai Sekarang",
+                hero_headline_prefix: "Membantu Brand Kecil",
+                hero_headline: "Helping Small Brands <br><span class='gradient-text'>Look Big Online</span>",
+                hero_subheadline: "Kami membantu UMKM & personal brand tampil profesional lewat desain, video, dan website — cepat, simpel, dan ramah di kantong.",
+                hero_cta_consult: "Konsultasi Gratis", hero_cta_services: "Lihat Layanan",
+                hero_microcopy: "Mulai dari <span class='text-white'>50K</span> • Tanpa ribet • Bisa via WhatsApp",
+                typing_words: ["Look Big Online", "Level Up Fast", "Scale Digitally"],
+                trust_since: "Dipercaya UMKM & personal brand sejak 2026",
+                trust_price: "Harga Transparan", trust_process: "Proses Cepat", trust_support: "Support Friendly",
+                services_intro: "<h2 class='text-5xl font-bold mb-6'>Our Creative <span class='text-blue-600'>Power.</span></h2><p class='text-slate-400 opacity-90'>Kami menawarkan eksekusi teknis terbaik untuk memastikan brand Anda tampil menonjol di dunia digital.</p>",
+                services_tag: "/ Jasa & Harga",
+                service_starts_from: " /mulai", portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
+                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
+            },
+            en: {
+                nav_home: "Home", nav_services: "Services", nav_portfolio: "Portfolio", nav_get_started: "Get Started",
+                hero_headline_prefix: "Helping Small Brands",
+                hero_headline: "Helping Small Brands <br><span class='gradient-text'>Look Big Online</span>",
+                hero_subheadline: "We help MSMEs & personal brands look professional through design, video, and websites — fast, simple, and affordable.",
+                hero_cta_consult: "Free Consultation", hero_cta_services: "Our Services",
+                hero_microcopy: "Starts from <span class='text-white'>50K</span> • No Hassle • WhatsApp Ready",
+                typing_words: ["Look Big Online", "Level Up Fast", "Scale Digitally"],
+                trust_since: "Trusted by MSMEs & personal brands since 2026",
+                trust_price: "Transparent Price", trust_process: "Fast Process", trust_support: "Friendly Support",
+                services_intro: "<h2 class='text-5xl font-bold mb-6'>Our Creative <span class='text-blue-600'>Power.</span></h2><p class='text-slate-400 opacity-90'>We offer the best technical execution to ensure your brand stands out digitally.</p>",
+                services_tag: "/ Services & Price",
+                service_starts_from: " /starts", portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
+                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
+            }
+        };
+
+        function initLanguage() {
+            const lang = localStorage.getItem('lang') || 'id';
+            setLanguage(lang);
+        }
+
+        function setLanguage(lang) {
+            document.body.setAttribute('data-lang', lang);
+            document.getElementById('lang-toggle').textContent = lang.toUpperCase();
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    if (key.includes('headline') || key.includes('intro') || key.includes('title') || key.includes('microcopy')) {
+                        el.innerHTML = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            localStorage.setItem('lang', lang);
+            startTypingEffect(lang);
+        }
+
+        let typingTimeout;
+        function startTypingEffect(lang) {
+            const words = translations[lang].typing_words;
+            const target = document.getElementById('typing-text');
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
+
+            function type() {
+                const currentWord = words[wordIndex];
+                target.textContent = isDeleting ? currentWord.substring(0, charIndex--) : currentWord.substring(0, charIndex++);
+                
+                let typeSpeed = isDeleting ? 50 : 150;
+                if (!isDeleting && charIndex > currentWord.length) { isDeleting = true; typeSpeed = 2000; }
+                else if (isDeleting && charIndex < 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
+                
+                typingTimeout = setTimeout(type, typeSpeed);
+            }
+            type();
+        }
+
+        function initTheme() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', theme);
+            updateThemeIcon(theme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icons = document.querySelectorAll('#theme-toggle i, #theme-toggle-mobile i');
+            icons.forEach(icon => {
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            });
+
+            // Update Logo Image based on theme
+            const logoImg = document.querySelector('.logo-img');
+            if (logoImg) {
+                logoImg.src = theme === 'light' ? 'logo dantha creative dark.png' : 'logo dantha creative.png';
+            }
+        }
+
+        // Event Listeners
+        const handleThemeToggle = (event) => {
+            const performToggle = () => {
+                const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            };
+
+            // Animation logic using View Transitions API
+            if (!document.startViewTransition) {
+                performToggle();
+                return;
+            }
+
+            const x = event.clientX ?? window.innerWidth / 2;
+            const y = event.clientY ?? window.innerHeight / 2;
+            const endRadius = Math.hypot(
+                Math.max(x, innerWidth - x),
+                Math.max(y, innerHeight - y)
+            );
+
+            const transition = document.startViewTransition(() => {
+                performToggle();
+            });
+
+            transition.ready.then(() => {
+                document.documentElement.animate(
+                    {
+                        clipPath: [
+                            `circle(0px at ${x}px ${y}px)`,
+                            `circle(${endRadius}px at ${x}px ${y}px)`,
+                        ],
+                    },
+                    {
+                        duration: 600,
+                        easing: 'ease-in-out',
+                        pseudoElement: '::view-transition-new(root)',
+                    }
+                );
+            });
+        };
+
+        document.getElementById('theme-toggle').addEventListener('click', handleThemeToggle);
+        document.getElementById('theme-toggle-mobile').addEventListener('click', handleThemeToggle);
+
+        function toggleLang() {
+            const newLang = document.body.getAttribute('data-lang') === 'id' ? 'en' : 'id';
+            setLanguage(newLang);
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', toggleLang);
+        document.getElementById('lang-toggle-mobile').addEventListener('click', toggleLang);
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Loader Animation
+        window.addEventListener('load', () => {
+            gsap.to("#loader", { opacity: 0, duration: 1, delay: 0.5, onComplete: () => {
+                document.getElementById('loader').style.display = 'none';
+                initTheme(); // Initialize theme before starting animations
+                initLanguage(); // Initialize language
+                startAnimations();
+            }});
+        });
+
+        function startAnimations() {
+            // Hero Animations
+            gsap.timeline()
+                .to(".hero-text > *", { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", stagger: 0.2 });
+
+            // Cursor Glow Interaction
+            const cursorGlow = document.getElementById('cursor-glow');
+            
+            const handlePointerMove = (e) => {
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                gsap.to(cursorGlow, {
+                    x: clientX - 200,
+                    y: clientY - 200,
+                    duration: 0.8,
+                    opacity: 1,
+                    ease: "power2.out"
+                });
+
+                // Parallax subtle movement for hero elements
+                const xPos = (clientX / window.innerWidth - 0.5) * 20;
+                const yPos = (clientY / window.innerHeight - 0.5) * 20;
+                gsap.to(".hero-text", { x: xPos, y: yPos, duration: 2, ease: "power2.out" });
+                gsap.to(".hero-grid", { x: -xPos * 2, y: -yPos * 2, duration: 2, ease: "power2.out" });
+            };
+
+            window.addEventListener('mousemove', handlePointerMove);
+            window.addEventListener('touchmove', handlePointerMove, { passive: true });
+
+            // Service Card 3D Tilt Interaction
+            document.querySelectorAll('.interactive-card').forEach(card => {
+                const handleTilt = (e) => {
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                    const rect = card.getBoundingClientRect();
+                    const x = clientX - rect.left;
+                    const y = clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / centerY * 10; // Max 10 degrees
+                    const rotateY = (x - centerX) / centerX * -10; // Max -10 degrees
+
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        scale: 1.03,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                };
+
+                const resetTilt = () => {
+                    gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                };
+
+                card.addEventListener('mousemove', handleTilt);
+                card.addEventListener('touchstart', handleTilt, { passive: true });
+                card.addEventListener('mouseleave', resetTilt);
+                card.addEventListener('touchend', resetTilt);
+            });
+
+            // Why Us Icons Hover Animation
+            document.querySelectorAll('#why-us .reveal-item').forEach(item => {
+                const icon = item.querySelector('i');
+                const text = item.querySelector('p');
+                
+                const playIconAnim = () => {
+                    gsap.to(icon, { y: -15, scale: 1.3, rotation: 12, duration: 0.4, ease: "back.out(1.7)" });
+                    gsap.to(text, { y: -5, color: "#ffffff", duration: 0.4 });
+                };
+                
+                const stopIconAnim = () => {
+                    gsap.to(icon, { y: 0, scale: 1, rotation: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
+                    gsap.to(text, { y: 0, color: "", duration: 0.6 });
+                };
+
+                item.addEventListener('mouseenter', playIconAnim);
+                item.addEventListener('touchstart', playIconAnim, { passive: true });
+                item.addEventListener('mouseleave', stopIconAnim);
+                item.addEventListener('touchend', stopIconAnim);
+            });
+
+            // Rocket Fly Animation in Contact Section
+            const contactSection = document.querySelector('#contact .container');
+            const launchRocket = () => {
+                const rocket = document.querySelector('.rocket-emoji');
+                if (!rocket || gsap.isTweening(rocket)) return;
+
+                const w = contactSection.offsetWidth / 2;
+                const h = contactSection.offsetHeight / 2;
+                const tl = gsap.timeline();
+
+                // Tambahkan kelas animasi api
+                rocket.classList.add('rocket-launching');
+
+                // Animasi Orbit Dinamis: Launch -> Top Right -> Bottom Right -> Bottom Left -> Top Left -> Home
+                tl.to(rocket, { 
+                    scale: 1.5, duration: 0.3, ease: "back.out" 
+                })
+                .to(rocket, {
+                    x: w + 100, y: -h - 100, rotation: 45, duration: 0.8, ease: "power2.inOut"
+                })
+                .to(rocket, {
+                    x: w + 100, y: h + 100, rotation: 135, duration: 0.8, ease: "none"
+                })
+                .to(rocket, {
+                    x: -w - 100, y: h + 100, rotation: 225, duration: 1, ease: "none"
+                })
+                .to(rocket, {
+                    x: -w - 100, y: -h - 100, rotation: 315, duration: 0.8, ease: "none"
+                })
+                .to(rocket, {
+                    x: 0, y: 0, rotation: 360, scale: 1, duration: 0.8, ease: "power2.out",
+                    onComplete: () => {
+                        rocket.classList.remove('rocket-launching');
+                        gsap.set(rocket, { rotation: 0 });
+                    }
+                });
+            };
+
+            contactSection.addEventListener('mouseenter', launchRocket);
+            contactSection.addEventListener('touchstart', launchRocket, { passive: true });
+
+            // Scroll Progress Bar Logic
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById("scroll-progress").style.width = scrolled + "%";
+            });
+
+            // Magnetic Buttons Interaction
+            document.querySelectorAll('.magnetic-button').forEach(btn => {
+                const handleMagnetic = (e) => {
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                    const rect = btn.getBoundingClientRect();
+                    const x = clientX - rect.left - rect.width / 2;
+                    const y = clientY - rect.top - rect.height / 2;
+                    gsap.to(btn, { x: x * 0.6, y: y * 0.6, duration: 0.4, ease: "power2.out" }); // Increased strength
+                };
+
+                const resetMagnetic = () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+                };
+
+                btn.addEventListener('mousemove', handleMagnetic);
+                btn.addEventListener('touchstart', handleMagnetic, { passive: true });
+                btn.addEventListener('mouseleave', resetMagnetic);
+                btn.addEventListener('touchend', resetMagnetic);
+            });
+
+            // Navbar Change on Scroll
+            ScrollTrigger.create({
+                start: "top -100", // Adjust trigger point
+                onEnter: () => document.getElementById('main-nav').classList.add('scrolled'),
+                onLeaveBack: () => document.getElementById('main-nav').classList.remove('scrolled')
+            });
+
+            // Reveal Elements on Scroll
+            gsap.utils.toArray(".reveal-item").forEach(item => {
+                gsap.from(item, {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 90%",
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+        }
+    </script>
+</body>
+</html>
