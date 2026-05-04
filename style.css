@@ -243,7 +243,6 @@ body[data-theme="light"] .btn-primary-lg {
 /* Rocket Fire Animation */
 .rocket-emoji {
     transition: filter 0.3s ease;
-    position: relative;
 }
 
 .rocket-launching {
