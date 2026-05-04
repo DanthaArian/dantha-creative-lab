@@ -117,6 +117,16 @@ body[data-theme="light"] #services {
                       linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
     background-size: 50px 50px;
     mask-image: radial-gradient(circle at center, black, transparent 80%);
+    will-change: transform;
+}
+
+/* Optimize performance for elements with heavy animations */
+.hero-text, .service-card, .rocket-emoji, .magnetic-button {
+    will-change: transform, opacity;
+}
+
+#cursor-glow {
+    will-change: transform;
 }
 
 /* Why Us Interaction */
@@ -128,13 +138,24 @@ body[data-theme="light"] #services {
     display: inline-block;
 }
 
-/* Services Background Fix */
+/* Services Background Optimization */
 #services {
     background-image: linear-gradient(rgba(3, 3, 5, 0.9), rgba(3, 3, 5, 0.9)), 
                       url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1920&q=80');
-    background-attachment: fixed;
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
+}
+
+/* Disable fixed background and cursor glow on mobile for performance */
+@media (max-width: 768px) {
+    #services {
+        background-attachment: scroll; /* Fixed BG sangat berat di mobile browser */
+    }
+    
+    #cursor-glow {
+        display: none !important; /* Glow tidak natural di layar sentuh */
+    }
 }
 
 body[data-theme="light"] .hero-grid { opacity: 0.1; filter: invert(1); }

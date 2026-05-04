@@ -93,7 +93,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 opacity-0 translate-y-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
+                    <a href="https://wa.me/62856092015193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
                         <span data-key="hero_cta_consult">Konsultasi Gratis</span>
                     </a>
                     <a href="#services" class="btn-outline-lg w-full sm:w-auto magnetic-button">
@@ -230,7 +230,7 @@
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
+                    <a href="https://wa.me/62856092015193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
                     <div class="text-left">
                         <p class="text-white/70 text-sm uppercase font-bold tracking-widest" data-key="contact_follow_us">Follow Us</p>
                         <a href="#" class="text-2xl font-bold">@danthacreative</a>
@@ -253,7 +253,7 @@
             <i class="fab fa-instagram text-2xl text-white"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@danthacreative</span>
         </a>
-        <a href="https://wa.me/6285609205193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+        <a href="https://wa.me/62856092015193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
             <i class="fab fa-whatsapp text-3xl text-white"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Chat via WhatsApp</span>
         </a>
@@ -437,10 +437,14 @@
             gsap.timeline()
                 .to(".hero-text > *", { opacity: 1, y: 0, duration: 1.2, ease: "power4.out", stagger: 0.2 });
 
-            // Cursor Glow Interaction
+            // Device Detection
+            const isMobile = window.innerWidth < 768;
             const cursorGlow = document.getElementById('cursor-glow');
             
             const handlePointerMove = (e) => {
+                // Full Animation: Hanya jalankan glow dan parallax grid di Desktop
+                if (isMobile) return; 
+
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
@@ -449,14 +453,15 @@
                     y: clientY - 200,
                     duration: 0.8,
                     opacity: 1,
-                    ease: "power2.out"
+                    ease: "power2.out",
+                    force3D: true
                 });
 
-                // Parallax subtle movement for hero elements
                 const xPos = (clientX / window.innerWidth - 0.5) * 20;
                 const yPos = (clientY / window.innerHeight - 0.5) * 20;
-                gsap.to(".hero-text", { x: xPos, y: yPos, duration: 2, ease: "power2.out" });
-                gsap.to(".hero-grid", { x: -xPos * 2, y: -yPos * 2, duration: 2, ease: "power2.out" });
+                
+                gsap.to(".hero-text", { x: xPos, y: yPos, duration: 2, ease: "power2.out", force3D: true });
+                gsap.to(".hero-grid", { x: -xPos * 2, y: -yPos * 2, duration: 2, ease: "power2.out", force3D: true });
             };
 
             window.addEventListener('mousemove', handlePointerMove);
@@ -465,12 +470,15 @@
             // Service Card 3D Tilt Interaction
             document.querySelectorAll('.interactive-card').forEach(card => {
                 const handleTilt = (e) => {
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    if (isMobile) {
+                        // HP version: Hanya scale up tanpa kemiringan 3D yang berat
+                        gsap.to(card, { scale: 1.05, duration: 0.3 });
+                        return;
+                    }
 
                     const rect = card.getBoundingClientRect();
-                    const x = clientX - rect.left;
-                    const y = clientY - rect.top;
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
                     const rotateX = (y - centerY) / centerY * 10; // Max 10 degrees
@@ -480,8 +488,9 @@
                         rotationX: rotateX,
                         rotationY: rotateY,
                         scale: 1.03,
-                        duration: 0.5,
-                        ease: "power2.out"
+                        duration: 0.4,
+                        ease: "power2.out",
+                        force3D: true
                     });
                 };
 
@@ -522,34 +531,28 @@
                 const rocket = document.querySelector('.rocket-emoji');
                 if (!rocket || gsap.isTweening(rocket)) return;
 
-                const w = contactSection.offsetWidth / 2;
-                const h = contactSection.offsetHeight / 2;
                 const tl = gsap.timeline();
+                const isMobile = window.innerWidth < 768;
 
-                // Tambahkan kelas animasi api
+                // Aktifkan visual api
                 rocket.classList.add('rocket-launching');
 
-                // Animasi Orbit Dinamis: Launch -> Top Right -> Bottom Right -> Bottom Left -> Top Left -> Home
-                tl.to(rocket, { 
-                    scale: 1.5, duration: 0.3, ease: "back.out" 
+                // Animasi Orbit 3D (Membelakangi Kotak)
+                tl.to(rocket, {
+                    scale: 2, y: -30, duration: 0.4, ease: "power2.out", force3D: true
                 })
                 .to(rocket, {
-                    x: w + 100, y: -h - 100, rotation: 45, duration: 0.8, ease: "power2.inOut"
+                    x: isMobile ? 200 : 400, y: -120, rotation: 30, scale: 0.3, opacity: 0, duration: 0.7, ease: "power2.in", force3D: true,
+                    onStart: () => gsap.set(rocket, { zIndex: -1 }) // Masuk ke belakang layer background
                 })
                 .to(rocket, {
-                    x: w + 100, y: h + 100, rotation: 135, duration: 0.8, ease: "none"
+                    x: isMobile ? -200 : -400, duration: 0.4, ease: "none", force3D: true
                 })
                 .to(rocket, {
-                    x: -w - 100, y: h + 100, rotation: 225, duration: 1, ease: "none"
-                })
-                .to(rocket, {
-                    x: -w - 100, y: -h - 100, rotation: 315, duration: 0.8, ease: "none"
-                })
-                .to(rocket, {
-                    x: 0, y: 0, rotation: 360, scale: 1, duration: 0.8, ease: "power2.out",
+                    x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)", force3D: true,
+                    onStart: () => gsap.set(rocket, { zIndex: 20 }), // Muncul kembali di depan konten
                     onComplete: () => {
                         rocket.classList.remove('rocket-launching');
-                        gsap.set(rocket, { rotation: 0 });
                     }
                 });
             };
@@ -567,15 +570,23 @@
 
             // Magnetic Buttons Interaction
             document.querySelectorAll('.magnetic-button').forEach(btn => {
-                btn.addEventListener('mousemove', (e) => {
+                const handleMagnetic = (e) => {
+                    if (isMobile) return; // Matikan efek magnetik di HP karena jari menutupi tombol
+
                     const rect = btn.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.6, y: y * 0.6, duration: 0.4, ease: "power2.out" }); // Increased strength
-                });
-                btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-                });
+                    gsap.to(btn, { x: x * 0.6, y: y * 0.6, duration: 0.4, ease: "power2.out", force3D: true });
+                };
+
+                const resetMagnetic = () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)", force3D: true });
+                };
+
+                btn.addEventListener('mousemove', handleMagnetic);
+                btn.addEventListener('touchstart', handleMagnetic, { passive: true });
+                btn.addEventListener('mouseleave', resetMagnetic);
+                btn.addEventListener('touchend', resetMagnetic);
             });
 
             // Navbar Change on Scroll
