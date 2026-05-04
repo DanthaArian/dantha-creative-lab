@@ -93,7 +93,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 opacity-0 translate-y-10">
-                    <a href="https://wa.me/62856092015193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
+                    <a href="https://wa.me/6285609205193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
                         <span data-key="hero_cta_consult">Konsultasi Gratis</span>
                     </a>
                     <a href="#services" class="btn-outline-lg w-full sm:w-auto magnetic-button">
@@ -230,7 +230,7 @@
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
-                    <a href="https://wa.me/62856092015193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
+                    <a href="https://wa.me/6285609205193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
                     <div class="text-left">
                         <p class="text-white/70 text-sm uppercase font-bold tracking-widest" data-key="contact_follow_us">Follow Us</p>
                         <a href="#" class="text-2xl font-bold">@danthacreative</a>
@@ -253,7 +253,7 @@
             <i class="fab fa-instagram text-2xl text-white"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@danthacreative</span>
         </a>
-        <a href="https://wa.me/62856092015193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+        <a href="https://wa.me/6285609205193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
             <i class="fab fa-whatsapp text-3xl text-white"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Chat via WhatsApp</span>
         </a>
@@ -304,6 +304,7 @@
         function setLanguage(lang) {
             document.body.setAttribute('data-lang', lang);
             document.getElementById('lang-toggle').textContent = lang.toUpperCase();
+            document.getElementById('lang-toggle-mobile').textContent = lang.toUpperCase();
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (translations[lang][key]) {
