@@ -955,6 +955,10 @@
                     });
                 };
 
+                // Pre-define vectors to avoid object creation in loop and fix initial "jump"
+                const finalCameraPos = new THREE.Vector3();
+                const finalLookAt = new THREE.Vector3();
+
                 const animate = () => {
                     requestAnimationFrame(animate);
                     const time = Date.now() * 0.0005;
@@ -981,8 +985,6 @@
 
                     // Scroll Zoom Logic (only if not transitioning)
                     const currentTheme = document.body.getAttribute('data-theme');
-                    const finalCameraPos = new THREE.Vector3();
-                    const finalLookAt = new THREE.Vector3();
 
                     if (currentTheme === 'dark') {
                         // Focus on Planet
@@ -991,12 +993,12 @@
                         const cameraOffset = new THREE.Vector3(sizeFactor * 2.5, sizeFactor * 0.8, sizeFactor * 4.5);
                         finalCameraPos.copy(finalLookAt).add(cameraOffset);
                     } else {
-                    // Overview Solar System with Zoom-in effect towards Sun
-                    const scrollProgress = Math.min(scrollRotation.value / (Math.PI * 2), 1);
-                    const startPos = new THREE.Vector3(0, 70, 150); // Posisi awal jauh
-                    const endPos = new THREE.Vector3(0, 15, 40);    // Posisi mendekat ke matahari
-                    
-                    finalCameraPos.lerpVectors(startPos, endPos, scrollProgress);
+                        // Overview Solar System with Zoom-in effect towards Sun
+                        const scrollProgress = Math.min(scrollRotation.value / (Math.PI * 2), 1);
+                        const startPos = new THREE.Vector3(0, 90, 190); // Didekatkan sedikit
+                        const endPos = new THREE.Vector3(0, 20, 55);    // Mendekat ke matahari tapi tetap proporsional
+                        
+                        finalCameraPos.lerpVectors(startPos, endPos, scrollProgress);
                         finalLookAt.set(0, 0, 0);
                     }
 
@@ -1007,7 +1009,6 @@
                     camera.lookAt(cameraTarget);
                     renderer.render(scene, camera);
                 };
-                animate();
 
                 // Set Initial State based on theme
                 if (document.body.getAttribute('data-theme') === 'dark') {
@@ -1015,9 +1016,12 @@
                     camera.position.set(ePos.x + 5, ePos.y + 1, ePos.z + 10);
                     cameraTarget.copy(ePos);
                 } else {
-                    camera.position.set(0, 50, 120);
+                    // Samakan dengan startPos di loop (0, 100, 220) agar tidak melompat
+                    camera.position.set(0, 90, 190);
                     cameraTarget.set(0, 0, 0);
                 }
+                
+                animate();
                 
                 // Exposed Global Function for Planet Switching
                 window.update3DPlanetFocus = (planetName) => {
