@@ -585,32 +585,6 @@
                             z: earthWorldPos.z,
                             duration: 1.2
                         }, 0)
-                        // Reveal Earth System dulu
-                        .to(earthSystemGroup, {
-                            onStart: () => { earthSystemGroup.userDataOpacity = 0; },
-                            userDataOpacity: 1,
-                            duration: 0.8,
-                            onUpdate: () => setObjectOpacity(earthSystemGroup, earthSystemGroup.userDataOpacity)
-                        }, 0)
-                        // TAHAP 2: Reveal Tata Surya lengkap & Geser Fokus ke Matahari
-                        .to(sunGroup, {
-                            onStart: () => { sunGroup.userDataOpacity = 0; },
-                            userDataOpacity: 1,
-                            duration: 1.5,
-                            onUpdate: () => setObjectOpacity(sunGroup, sunGroup.userDataOpacity)
-                        }, 0.7)
-                        .to(otherPlanetsGroup, {
-                            onStart: () => { otherPlanetsGroup.userDataOpacity = 0; },
-                            userDataOpacity: 1,
-                            duration: 1.5,
-                            onUpdate: () => setObjectOpacity(otherPlanetsGroup, otherPlanetsGroup.userDataOpacity)
-                        }, 0.8)
-                        .to(orbitGroup, {
-                            onStart: () => { orbitGroup.userDataOpacity = 0; },
-                            userDataOpacity: 0.05,
-                            duration: 1.5,
-                            onUpdate: () => setObjectOpacity(orbitGroup, orbitGroup.userDataOpacity)
-                        }, 0.9)
                         .to(camera.position, {
                             x: 0, y: 50, z: 120,
                             duration: 1.8
@@ -635,15 +609,6 @@
                         .to(camera.position, {
                             x: earthWorldPos.x + 5, y: earthWorldPos.y + 1, z: earthWorldPos.z + 10,
                             duration: 1.5
-                        }, 0)
-                        .to([sunGroup, otherPlanetsGroup, orbitGroup], {
-                            userDataOpacity: 0,
-                            duration: 0.8,
-                            onUpdate: function() {
-                                setObjectOpacity(sunGroup, sunGroup.userDataOpacity || 0);
-                                setObjectOpacity(otherPlanetsGroup, otherPlanetsGroup.userDataOpacity || 0);
-                                setObjectOpacity(orbitGroup, orbitGroup.userDataOpacity || 0);
-                            }
                         }, 0);
                 };
 
@@ -699,9 +664,6 @@
                     const ePos = getSolarEarthWorldPosition();
                     camera.position.set(ePos.x + 5, ePos.y + 1, ePos.z + 10);
                     cameraTarget.copy(ePos);
-                    setObjectOpacity(sunGroup, 0);
-                    setObjectOpacity(otherPlanetsGroup, 0);
-                    setObjectOpacity(orbitGroup, 0);
                 } else {
                     camera.position.set(0, 50, 120);
                     cameraTarget.set(0, 0, 0);
