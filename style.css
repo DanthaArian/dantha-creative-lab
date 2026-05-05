@@ -73,6 +73,13 @@ body {
     padding-bottom: 0.5rem;
 }
 
+@media (max-width: 768px) {
+    #main-nav.scrolled {
+        backdrop-filter: none;
+        background-color: rgba(0, 0, 0, 0.95);
+    }
+}
+
 /* --- Theme Transition & Light Mode --- */
 body[data-theme="light"] {
     background-color: #f8fafc; /* Warna off-white yang lebih empuk di mata */
@@ -120,6 +127,17 @@ body[data-theme="light"] #services {
     will-change: transform;
 }
 
+/* Earth Background Styling */
+#earth-container {
+    perspective: 1000px;
+    pointer-events: none;
+}
+
+#earth-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 /* Optimize performance for elements with heavy animations */
 .hero-text, .service-card, .rocket-emoji, .magnetic-button {
     will-change: transform, opacity;
@@ -156,6 +174,10 @@ body[data-theme="light"] #services {
     #cursor-glow {
         display: none !important; /* Glow tidak natural di layar sentuh */
     }
+    
+    #earth-container {
+        display: none !important; /* Matikan 3D di mobile untuk performa */
+    }
 }
 
 body[data-theme="light"] .hero-grid { opacity: 0.1; filter: invert(1); }
@@ -169,10 +191,6 @@ body[data-theme="light"] .logo-dot { color: #3b82f6 !important; }
 ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
-}
-
-::view-transition-new(root) {
-    z-index: 9999;
 }
 
 /* Prevent button text from changing in light mode */
