@@ -482,6 +482,13 @@
                 solarEarthMesh = earth;
                 earthSystemGroup.add(solarEarthPivot);
 
+                // Earth Orbit Ring (Visual consistency)
+                const earthOrbitGeo = new THREE.RingGeometry(19.92, 20.08, 128);
+                const earthOrbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.05 });
+                const earthOrbit = new THREE.Mesh(earthOrbitGeo, earthOrbitMat);
+                earthOrbit.rotation.x = Math.PI / 2;
+                orbitGroup.add(earthOrbit);
+
                 // Moon (for Dark Mode)
                 const moonGeo = new THREE.SphereGeometry(0.35, 32, 32);
                 const moonTex = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg');
@@ -539,7 +546,9 @@
                     createPlanet(0.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/venus_surface.jpg', 16, 0.005),
                     createPlanet(0.7, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars.jpg', 28, 0.003),
                     createPlanet(2.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter.jpg', 42, 0.001),
-                    createPlanet(1.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true)
+                    createPlanet(1.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true),
+                    createPlanet(1.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/uranus.jpg', 72, 0.0006),
+                    createPlanet(1.1, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/neptune.jpg', 86, 0.0004)
                 ];
 
                 planets.forEach(p => {
