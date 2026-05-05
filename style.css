@@ -129,6 +129,14 @@ body[data-theme="light"] {
     color: #0f172a;
 }
 
+/* Melindungi keterbacaan teks saat tata surya aktif di mode terang */
+body[data-theme="light"] .hero-text h1,
+body[data-theme="light"] .hero-text p {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 10;
+}
+
 body[data-theme="light"] #main-nav { background-color: rgba(252, 252, 253, 0.8); border-color: rgba(15, 23, 42, 0.05); }
 body[data-theme="light"] #main-nav.scrolled { background-color: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); }
 body[data-theme="light"] .nav-link { color: #64748b; }

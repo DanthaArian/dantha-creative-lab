@@ -370,54 +370,18 @@
         }
 
         // Event Listeners
-        const handleThemeToggle = (event) => {
+        const handleThemeToggle = () => {
             const currentTheme = document.body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
-            const performToggle = () => {
-                document.body.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
-                if (window.update3DTheme) window.update3DTheme(newTheme);
-            };
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
 
-            // Animation logic using View Transitions API
-            if (!document.startViewTransition) {
-                performToggle();
-                return;
+            // Animasi utama berasal dari Three.js Transition
+            if (window.transition3DTheme) {
+                window.transition3DTheme(newTheme);
             }
-
-            const x = event.clientX ?? window.innerWidth / 2;
-            const y = event.clientY ?? window.innerHeight / 2;
-            const endRadius = Math.hypot(
-                Math.max(x, innerWidth - x),
-                Math.max(y, innerHeight - y)
-            );
-
-            const isDarkToLight = newTheme === 'light';
-
-            const transition = document.startViewTransition(() => {
-                performToggle();
-            });
-
-            transition.ready.then(() => {
-                const clipPath = [
-                    `circle(${isDarkToLight ? 0 : endRadius}px at ${x}px ${y}px)`,
-                    `circle(${isDarkToLight ? endRadius : 0}px at ${x}px ${y}px)`,
-                ];
-
-                document.documentElement.animate(
-                    {
-                        clipPath: clipPath,
-                    },
-                    {
-                        duration: 600,
-                        easing: 'ease-in-out',
-                        // Jika terang ke gelap, kita animasikan layer lama agar "mengecil"
-                        pseudoElement: isDarkToLight ? '::view-transition-new(root)' : '::view-transition-old(root)',
-                    }
-                );
-            });
         };
 
         document.getElementById('theme-toggle').addEventListener('click', handleThemeToggle);
@@ -471,8 +435,37 @@
                 renderer.setPixelRatio(window.devicePixelRatio);
                 container.appendChild(renderer.domElement);
 
-                const globeGroup = new THREE.Group();
-                scene.add(globeGroup);
+                const solarSystemGroup = new THREE.Group();
+                scene.add(solarSystemGroup);
+
+                // Groups for independent control
+                const sunGroup = new THREE.Group();
+                const earthSystemGroup = new THREE.Group();
+                const otherPlanetsGroup = new THREE.Group();
+                const orbitGroup = new THREE.Group();
+                const starsGroup = new THREE.Group(); // To control star visibility
+                
+                solarSystemGroup.add(sunGroup, earthSystemGroup, otherPlanetsGroup, orbitGroup, starsGroup);
+
+                // Camera Target for smooth transitions
+                const cameraTarget = new THREE.Vector3(0, 0, 0);
+                let solarEarthMesh, solarEarthPivot;
+
+                // Helper for World Position
+                function getSolarEarthWorldPosition() {
+                    const pos = new THREE.Vector3();
+                    if (solarEarthMesh) solarEarthMesh.getWorldPosition(pos);
+                    return pos;
+                }
+
+                function setObjectOpacity(obj, opacity) {
+                    obj.traverse(child => {
+                        if (child.isMesh && child.material) {
+                            child.material.transparent = true;
+                            child.material.opacity = opacity;
+                        }
+                    });
+                }
 
                 const textureLoader = new THREE.TextureLoader();
 
@@ -481,61 +474,82 @@
                 const earthTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
                 const earthMat = new THREE.MeshPhongMaterial({ map: earthTex, shininess: 10, bumpScale: 0.05 });
                 const earth = new THREE.Mesh(earthGeo, earthMat);
-                globeGroup.add(earth);
+                
+                // Earth Pivot (for Orbit)
+                solarEarthPivot = new THREE.Group();
+                solarEarthPivot.add(earth);
+                earth.position.x = 20; 
+                solarEarthMesh = earth;
+                earthSystemGroup.add(solarEarthPivot);
 
                 // Moon (for Dark Mode)
                 const moonGeo = new THREE.SphereGeometry(0.35, 32, 32);
                 const moonTex = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg');
                 const moonMat = new THREE.MeshPhongMaterial({ map: moonTex });
                 const moon = new THREE.Mesh(moonGeo, moonMat);
+                earth.add(moon); // Moon orbits Earth
                 
-                // Sun (for Light Mode) - Enhanced Visuals
-                const sunGeo = new THREE.SphereGeometry(2.5, 64, 64);
-                const sunMat = new THREE.MeshBasicMaterial({ 
-                    color: 0xffdd44, // Warna kuning terang sebagai dasar
-                });
+                // Sun (The Center)
+                const sunGeo = new THREE.SphereGeometry(6, 64, 64);
+                const sunMat = new THREE.MeshBasicMaterial({ color: 0xffcc33 });
                 const sun = new THREE.Mesh(sunGeo, sunMat);
-                
-                // Surface Detail Layer (To make it not "plain")
-                const sunSurfaceGeo = new THREE.SphereGeometry(2.51, 64, 64);
-                const sunSurfaceMat = new THREE.MeshBasicMaterial({
-                    color: 0xff6600,
-                    transparent: true,
-                    opacity: 0.5,
-                    blending: THREE.AdditiveBlending,
-                });
-                const sunSurface = new THREE.Mesh(sunSurfaceGeo, sunSurfaceMat);
-                sun.add(sunSurface); // Attached to main sun
+                sunGroup.add(sun);
 
-                // Load tekstur secara async agar tidak hitam saat proses loading
                 textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/sun.jpg', (texture) => {
                     sunMat.map = texture;
                     sunMat.color.set(0xffffff);
                     sunMat.needsUpdate = true;
+                });
+
+                // Helper function to create planets with accurate textures
+                const createPlanet = (size, textureUrl, dist, speed, hasRings = false) => {
+                    const geo = new THREE.SphereGeometry(size, 32, 32);
+                    const mat = new THREE.MeshPhongMaterial({ 
+                        shininess: 5,
+                        color: 0x444444 // Fallback color agar tidak hitam saat loading
+                    });
+                    const mesh = new THREE.Mesh(geo, mat);
                     
-                    sunSurfaceMat.map = texture; // Use same texture for surface layer
-                    sunSurfaceMat.color.set(0xffaa00);
-                    sunSurfaceMat.needsUpdate = true;
-                });
+                    textureLoader.load(textureUrl, (tex) => {
+                        mat.map = tex;
+                        mat.color.set(0xffffff); // Hapus fallback setelah tekstur siap
+                        mat.needsUpdate = true;
+                    });
 
-                // Position for perfect sphere look
-                sun.position.set(-7, 4, -18); 
+                    // Orbit ring visualizer
+                    const orbitGeo = new THREE.RingGeometry(dist - 0.08, dist + 0.08, 128);
+                    const orbitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.05 });
+                    const orbit = new THREE.Mesh(orbitGeo, orbitMat);
+                    orbit.rotation.x = Math.PI / 2;
+                    orbitGroup.add(orbit);
+                    
+                    if (hasRings) {
+                        const ringGeo = new THREE.RingGeometry(size * 1.4, size * 2.2, 64);
+                        const ringMat = new THREE.MeshBasicMaterial({ color: 0x908d81, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+                        const ring = new THREE.Mesh(ringGeo, ringMat);
+                        ring.rotation.x = Math.PI / 2.2;
+                        mesh.add(ring);
+                    }
+                    
+                    return { mesh, dist, speed };
+                };
 
-                // Sun Glow Atmosphere (Halo effect)
-                const sunGlowGeo = new THREE.SphereGeometry(2.8, 64, 64);
-                const sunGlowMat = new THREE.MeshBasicMaterial({ 
-                    color: 0xffaa00,
-                    transparent: true,
-                    opacity: 0.4,
-                    blending: THREE.AdditiveBlending,
-                    side: THREE.BackSide
+                const planets = [
+                    createPlanet(0.4, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mercury.jpg', 10, 0.008),
+                    createPlanet(0.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/venus_surface.jpg', 16, 0.005),
+                    createPlanet(0.7, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars.jpg', 28, 0.003),
+                    createPlanet(2.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter.jpg', 42, 0.001),
+                    createPlanet(1.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true)
+                ];
+
+                planets.forEach(p => {
+                    otherPlanetsGroup.add(p.mesh);
                 });
-                const sunGlow = new THREE.Mesh(sunGlowGeo, sunGlowMat);
-                sunGlow.position.copy(sun.position);
 
                 // Sun Glow Light
-                const sunPointLight = new THREE.PointLight(0xffdd44, 20, 100);
-                sunPointLight.position.copy(sun.position);
+                const sunPointLight = new THREE.PointLight(0xffdd44, 100, 300);
+                sunPointLight.position.set(0, 0, 0);
+                sunGroup.add(sunPointLight);
 
                 // Lighting
                 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -545,53 +559,153 @@
                 blueLight.position.set(5, 3, 5);
                 scene.add(blueLight);
 
-                // Theme Update Logic for 3D
-                window.update3DTheme = (theme) => {
-                    if (theme === 'dark') {
-                        globeGroup.add(moon);
-                        scene.remove(sun);
-                        scene.remove(sunGlow);
-                        scene.remove(sunPointLight);
-                        blueLight.intensity = 2.5;
-                    } else {
-                        globeGroup.remove(moon);
-                        scene.add(sun);
-                        scene.add(sunGlow);
-                        scene.add(sunPointLight);
-                        blueLight.intensity = 0.5;
-                    }
+                let activeThemeTween = null;
+                let scrollZoom = { value: 0 }; // Variabel proxy untuk scroll progress
+                const clock = new THREE.Clock();
+
+                window.transitionToLight = () => {
+                    if (activeThemeTween) activeThemeTween.kill();
+                    
+                    solarSystemGroup.visible = true;
+                    const earthWorldPos = getSolarEarthWorldPosition();
+
+                    activeThemeTween = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+
+                    activeThemeTween
+                        // TAHAP 1: Fokus tetap di Bumi sambil mundur
+                        .to(camera.position, {
+                            x: earthWorldPos.x * 0.5,
+                            y: 10,
+                            z: 30,
+                            duration: 1.2
+                        }, 0)
+                        .to(cameraTarget, {
+                            x: earthWorldPos.x,
+                            y: earthWorldPos.y,
+                            z: earthWorldPos.z,
+                            duration: 1.2
+                        }, 0)
+                        // Reveal Earth System dulu
+                        .to(earthSystemGroup, {
+                            onStart: () => { earthSystemGroup.userDataOpacity = 0; },
+                            userDataOpacity: 1,
+                            duration: 0.8,
+                            onUpdate: () => setObjectOpacity(earthSystemGroup, earthSystemGroup.userDataOpacity)
+                        }, 0)
+                        // TAHAP 2: Reveal Tata Surya lengkap & Geser Fokus ke Matahari
+                        .to(sunGroup, {
+                            onStart: () => { sunGroup.userDataOpacity = 0; },
+                            userDataOpacity: 1,
+                            duration: 1.5,
+                            onUpdate: () => setObjectOpacity(sunGroup, sunGroup.userDataOpacity)
+                        }, 0.7)
+                        .to(otherPlanetsGroup, {
+                            onStart: () => { otherPlanetsGroup.userDataOpacity = 0; },
+                            userDataOpacity: 1,
+                            duration: 1.5,
+                            onUpdate: () => setObjectOpacity(otherPlanetsGroup, otherPlanetsGroup.userDataOpacity)
+                        }, 0.8)
+                        .to(orbitGroup, {
+                            onStart: () => { orbitGroup.userDataOpacity = 0; },
+                            userDataOpacity: 0.05,
+                            duration: 1.5,
+                            onUpdate: () => setObjectOpacity(orbitGroup, orbitGroup.userDataOpacity)
+                        }, 0.9)
+                        .to(camera.position, {
+                            x: 0, y: 50, z: 120,
+                            duration: 1.8
+                        }, 1.0)
+                        .to(cameraTarget, {
+                            x: 0, y: 0, z: 0,
+                            duration: 1.8
+                        }, 1.0);
                 };
 
-                // Initial state
-                window.update3DTheme(document.body.getAttribute('data-theme') || 'dark');
+                window.transitionToDark = () => {
+                    if (activeThemeTween) activeThemeTween.kill();
+                    const earthWorldPos = getSolarEarthWorldPosition();
 
-                camera.position.z = 6;
+                    activeThemeTween = gsap.timeline({ defaults: { ease: "power3.inOut" } });
 
-                // Animation Loop
+                    activeThemeTween
+                        .to(cameraTarget, {
+                            x: earthWorldPos.x, y: earthWorldPos.y, z: earthWorldPos.z,
+                            duration: 1.2
+                        }, 0)
+                        .to(camera.position, {
+                            x: earthWorldPos.x + 5, y: earthWorldPos.y + 1, z: earthWorldPos.z + 10,
+                            duration: 1.5
+                        }, 0)
+                        .to([sunGroup, otherPlanetsGroup, orbitGroup], {
+                            userDataOpacity: 0,
+                            duration: 0.8,
+                            onUpdate: function() {
+                                setObjectOpacity(sunGroup, sunGroup.userDataOpacity || 0);
+                                setObjectOpacity(otherPlanetsGroup, otherPlanetsGroup.userDataOpacity || 0);
+                                setObjectOpacity(orbitGroup, orbitGroup.userDataOpacity || 0);
+                            }
+                        }, 0);
+                };
+
+                window.transition3DTheme = (theme) => {
+                    if (theme === 'light') window.transitionToLight();
+                    else window.transitionToDark();
+                };
+
                 const animate = () => {
                     requestAnimationFrame(animate);
-                    earth.rotation.y += 0.001; // Slow rotation
+                    const time = Date.now() * 0.0005;
+
+                    earth.rotation.y += 0.005;
+                    sun.rotation.y += 0.001;
+                    solarEarthPivot.rotation.y += 0.002;
                     
-                    if (sun.parent) {
-                        sun.rotation.y += 0.0015;
-                        sunSurface.rotation.y -= 0.002; // Reverse rotation for dynamic look
-                        sunSurface.rotation.z += 0.001;
-                        // Pulsating glow effect for more realism
-                        const scale = 1 + Math.sin(Date.now() * 0.001) * 0.05;
-                        sunGlow.scale.set(scale, scale, scale);
-                    }
+                    planets.forEach(p => {
+                        p.mesh.position.x = Math.cos(time * p.speed * 100) * p.dist;
+                        p.mesh.position.z = Math.sin(time * p.speed * 100) * p.dist;
+                        p.mesh.rotation.y += 0.01;
+                    });
                     
-                    if (moon.parent) {
-                        const time = Date.now() * 0.0005;
-                        // Radius orbit sedikit diperkecil agar tidak terkena distorsi lensa di pinggir
-                        moon.position.x = Math.cos(time) * 2.8;
-                        moon.position.z = Math.sin(time) * 2.8;
-                        moon.rotation.y += 0.005;
+                    moon.position.x = Math.cos(time * 2) * 3;
+                    moon.position.z = Math.sin(time * 2) * 3;
+                    moon.rotation.y += 0.01;
+
+                    // Scroll Zoom Logic (only if not transitioning)
+                    const currentTheme = document.body.getAttribute('data-theme');
+                    const earthPos = getSolarEarthWorldPosition();
+
+                    if (!activeThemeTween || !activeThemeTween.isActive()) {
+                        if (currentTheme === 'dark') {
+                            const endOffset = new THREE.Vector3(1.5, 0.5, 3.5);
+                            const startOffset = new THREE.Vector3(5, 1, 10);
+                            const currentOffset = new THREE.Vector3().lerpVectors(startOffset, endOffset, scrollZoom.value);
+                            camera.position.lerp(earthPos.clone().add(currentOffset), 0.08);
+                            cameraTarget.lerp(earthPos, 0.1);
+                        } else {
+                            const startPos = new THREE.Vector3(0, 50, 120);
+                            const endPos = new THREE.Vector3(0, 5, 20);
+                            camera.position.lerp(new THREE.Vector3().lerpVectors(startPos, endPos, scrollZoom.value), 0.08);
+                            cameraTarget.lerp(new THREE.Vector3(0, 0, 0), 0.1);
+                        }
                     }
 
+                    camera.lookAt(cameraTarget);
                     renderer.render(scene, camera);
                 };
                 animate();
+
+                // Set Initial State based on theme
+                if (document.body.getAttribute('data-theme') === 'dark') {
+                    const ePos = getSolarEarthWorldPosition();
+                    camera.position.set(ePos.x + 5, ePos.y + 1, ePos.z + 10);
+                    cameraTarget.copy(ePos);
+                    setObjectOpacity(sunGroup, 0);
+                    setObjectOpacity(otherPlanetsGroup, 0);
+                    setObjectOpacity(orbitGroup, 0);
+                } else {
+                    camera.position.set(0, 50, 120);
+                    cameraTarget.set(0, 0, 0);
+                }
 
                 // GSAP Scroll Integration
                 const earthTl = gsap.timeline({
@@ -603,10 +717,10 @@
                     }
                 });
 
-                // Sekarang kita menggerakkan globeGroup, sehingga Bulan ikut membesar/mendekat
-                earthTl.to(globeGroup.scale, {
-                    x: 6, y: 6, z: 6,
-                    ease: "none"
+                // Gunakan timeline untuk menggerakkan variabel scrollZoom saja
+                earthTl.to(scrollZoom, {
+                    value: 1,
+                    ease: "power2.inOut"
                 }, 0);
 
                 earthTl.to(container, {
