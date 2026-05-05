@@ -15,6 +15,49 @@ body {
     display: inline-block;
 }
 
+/* --- Custom Scrollbar Styling --- */
+::-webkit-scrollbar {
+    width: 18px; /* Diperlebar agar emoji kucing terlihat utuh */
+}
+
+::-webkit-scrollbar-track {
+    background: #030305;
+}
+
+/* Tombol di ujung atas dan bawah scrollbar */
+::-webkit-scrollbar-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18'><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='14'>🐱</text></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 20px;
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18'><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='14'>🐱</text></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1e293b;
+    border-radius: 20px;
+    border: 4px solid #030305; /* Memberikan ruang agar thumb terlihat ramping di tengah */
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #3b82f6, #a855f7);
+}
+
+/* Light Mode Scrollbar */
+body[data-theme="light"]::-webkit-scrollbar-track { background: #f8fafc; }
+body[data-theme="light"]::-webkit-scrollbar-thumb { 
+    background-color: #cbd5e1; 
+    border: 4px solid #f8fafc; 
+}
+body[data-theme="light"]::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
 .nav-link {
     color: #94a3b8;
     transition: color 0.3s;
@@ -224,6 +267,8 @@ body[data-theme="light"] .btn-primary-lg {
     background: linear-gradient(to right, #3b82f6, #a855f7);
     z-index: 1000;
     width: 0%;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    transition: width 0.1s ease-out;
 }
 
 /* Sophisticated Background Card Effect */
