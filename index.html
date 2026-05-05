@@ -413,7 +413,7 @@
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
         // Loader Animation
-        window.addEventListener('load', () => {
+        window.addEventListener('DOMContentLoaded', () => {
             gsap.to("#loader", { opacity: 0, duration: 1, delay: 0.5, onComplete: () => {
                 document.getElementById('loader').style.display = 'none';
                 initTheme(); // Initialize theme before starting animations
@@ -480,11 +480,306 @@
                 }
 
                 const textureLoader = new THREE.TextureLoader();
+                textureLoader.setCrossOrigin('anonymous');
+
+                if (THREE.SRGBColorSpace) {
+                    renderer.outputColorSpace = THREE.SRGBColorSpace;
+                }
+
+                const maxTextureAnisotropy = renderer.capabilities.getMaxAnisotropy();
+                const planetTextureBase = 'https://threejs.org/examples/textures/planets/';
+
+                function setTextureQuality(texture) {
+                    texture.anisotropy = maxTextureAnisotropy;
+                    if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+                    texture.needsUpdate = true;
+                    return texture;
+                }
+
+                function seededRandom(seed) {
+                    let value = seed;
+                    return () => {
+                        value += 0x6D2B79F5;
+                        let t = value;
+                        t = Math.imul(t ^ (t >>> 15), t | 1);
+                        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                    };
+                }
+
+                function drawSoftEllipse(ctx, x, y, radiusX, radiusY, color, alpha, rotation = 0) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                function drawNoise(ctx, width, height, seed, alpha) {
+                    const rand = seededRandom(seed);
+                    const noiseCanvas = document.createElement('canvas');
+                    noiseCanvas.width = width;
+                    noiseCanvas.height = height;
+                    const noiseCtx = noiseCanvas.getContext('2d');
+                    const noise = noiseCtx.createImageData(width, height);
+                    const data = noise.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const value = Math.floor(rand() * 255);
+                        data[i] = value;
+                        data[i + 1] = value;
+                        data[i + 2] = value;
+                        data[i + 3] = 255;
+                    }
+                    noiseCtx.putImageData(noise, 0, 0);
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+                    ctx.globalCompositeOperation = 'overlay';
+                    ctx.drawImage(noiseCanvas, 0, 0);
+                    ctx.restore();
+                }
+
+                function drawWavyBand(ctx, width, y, thickness, color, alpha, phase, amplitude = 8) {
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = thickness;
+                    ctx.beginPath();
+                    for (let x = -20; x <= width + 20; x += 24) {
+                        const waveY = y + Math.sin((x * 0.016) + phase) * amplitude + Math.sin((x * 0.045) + phase) * (amplitude * 0.35);
+                        if (x === -20) ctx.moveTo(x, waveY);
+                        else ctx.lineTo(x, waveY);
+                    }
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                function createPlanetTexture(type) {
+                    const canvas = document.createElement('canvas');
+                    const width = 1024;
+                    const height = 512;
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    const rand = seededRandom(type.length * 739);
+
+                    let gradient = ctx.createLinearGradient(0, 0, 0, height);
+
+                    if (type === 'mercury') {
+                        gradient.addColorStop(0, '#b8b0a7');
+                        gradient.addColorStop(0.5, '#6f6b67');
+                        gradient.addColorStop(1, '#343332');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        drawNoise(ctx, width, height, 11, 0.18);
+
+                        for (let i = 0; i < 190; i++) {
+                            const r = 4 + rand() * 22;
+                            const x = rand() * width;
+                            const y = rand() * height;
+                            drawSoftEllipse(ctx, x, y, r, r * (0.65 + rand() * 0.45), '#191919', 0.16 + rand() * 0.16, rand() * Math.PI);
+                            drawSoftEllipse(ctx, x - r * 0.25, y - r * 0.22, r * 0.55, r * 0.25, '#f2eee8', 0.08, rand() * Math.PI);
+                        }
+                    } else if (type === 'venus') {
+                        gradient.addColorStop(0, '#f4d28a');
+                        gradient.addColorStop(0.45, '#c98242');
+                        gradient.addColorStop(1, '#744019');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        for (let y = -20; y < height + 20; y += 14) {
+                            drawWavyBand(ctx, width, y + rand() * 10, 5 + rand() * 7, rand() > 0.5 ? '#fff0bd' : '#7a3f1d', 0.12 + rand() * 0.13, rand() * 10, 13);
+                        }
+                        drawNoise(ctx, width, height, 22, 0.08);
+                    } else if (type === 'mars') {
+                        gradient.addColorStop(0, '#f2a06a');
+                        gradient.addColorStop(0.42, '#b84c2a');
+                        gradient.addColorStop(1, '#552116');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        drawNoise(ctx, width, height, 33, 0.16);
+
+                        for (let i = 0; i < 58; i++) {
+                            drawSoftEllipse(ctx, rand() * width, rand() * height, 28 + rand() * 95, 10 + rand() * 36, rand() > 0.35 ? '#5f1f16' : '#e07a42', 0.16 + rand() * 0.2, rand() * Math.PI);
+                        }
+                        ctx.fillStyle = 'rgba(239, 232, 213, 0.5)';
+                        ctx.fillRect(0, 0, width, 30);
+                        ctx.fillRect(0, height - 26, width, 26);
+                    } else if (type === 'jupiter') {
+                        ctx.fillStyle = '#c99870';
+                        ctx.fillRect(0, 0, width, height);
+                        const bands = ['#efe0c2', '#a96e45', '#d4a26f', '#6d3f2d', '#f8ead0', '#bf7f54'];
+                        let y = 0;
+                        while (y < height) {
+                            const bandHeight = 18 + rand() * 44;
+                            ctx.fillStyle = bands[Math.floor(rand() * bands.length)];
+                            ctx.globalAlpha = 0.72 + rand() * 0.25;
+                            ctx.fillRect(0, y, width, bandHeight);
+                            drawWavyBand(ctx, width, y + bandHeight * 0.5, 7 + rand() * 9, '#fff4d8', 0.14, rand() * 10, 10);
+                            y += bandHeight;
+                        }
+                        ctx.globalAlpha = 1;
+                        drawSoftEllipse(ctx, width * 0.68, height * 0.56, 92, 42, '#9c3e24', 0.78, -0.08);
+                        drawSoftEllipse(ctx, width * 0.68, height * 0.56, 64, 26, '#e39b61', 0.5, -0.08);
+                        drawNoise(ctx, width, height, 44, 0.04);
+                    } else if (type === 'saturn') {
+                        gradient.addColorStop(0, '#f4db9c');
+                        gradient.addColorStop(0.48, '#c3924d');
+                        gradient.addColorStop(1, '#6c4a24');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        for (let y = 18; y < height; y += 18) {
+                            drawWavyBand(ctx, width, y, 4 + rand() * 4, rand() > 0.5 ? '#fff1c2' : '#8b612f', 0.13, rand() * 8, 5);
+                        }
+                        drawNoise(ctx, width, height, 55, 0.05);
+                    } else if (type === 'uranus') {
+                        gradient.addColorStop(0, '#e4fff7');
+                        gradient.addColorStop(0.45, '#8edbd7');
+                        gradient.addColorStop(1, '#3a8aa5');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        for (let y = 30; y < height; y += 28) {
+                            drawWavyBand(ctx, width, y, 4, y % 56 === 0 ? '#ffffff' : '#2e7891', 0.09, rand() * 8, 7);
+                        }
+                        drawNoise(ctx, width, height, 66, 0.035);
+                    } else if (type === 'neptune') {
+                        gradient.addColorStop(0, '#83bcff');
+                        gradient.addColorStop(0.43, '#1f61d5');
+                        gradient.addColorStop(1, '#071b64');
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(0, 0, width, height);
+                        for (let y = 26; y < height; y += 24) {
+                            drawWavyBand(ctx, width, y, 5 + rand() * 3, rand() > 0.45 ? '#bfe0ff' : '#06145a', 0.12, rand() * 9, 10);
+                        }
+                        drawSoftEllipse(ctx, width * 0.62, height * 0.58, 62, 28, '#041044', 0.72, -0.2);
+                        drawSoftEllipse(ctx, width * 0.35, height * 0.35, 120, 12, '#e5f4ff', 0.18, 0.08);
+                        drawNoise(ctx, width, height, 77, 0.04);
+                    }
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    return setTextureQuality(texture);
+                }
+
+                function createSaturnRingTexture() {
+                    const canvas = document.createElement('canvas');
+                    const width = 1024;
+                    const height = 96;
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    const rand = seededRandom(880);
+
+                    for (let x = 0; x < width; x++) {
+                        const band = Math.sin(x * 0.055) * 0.5 + 0.5;
+                        const alpha = 0.18 + band * 0.42 + rand() * 0.08;
+                        ctx.fillStyle = `rgba(${190 + band * 45}, ${166 + band * 34}, ${117 + band * 28}, ${alpha})`;
+                        ctx.fillRect(x, 0, 1, height);
+                    }
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    return setTextureQuality(texture);
+                }
+
+                function createSunTexture() {
+                    const canvas = document.createElement('canvas');
+                    const width = 1024;
+                    const height = 512;
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    const rand = seededRandom(991);
+                    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+
+                    gradient.addColorStop(0, '#fff7a8');
+                    gradient.addColorStop(0.22, '#ffd15a');
+                    gradient.addColorStop(0.5, '#ff8b22');
+                    gradient.addColorStop(0.78, '#d94710');
+                    gradient.addColorStop(1, '#6d1505');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+
+                    drawNoise(ctx, width, height, 992, 0.22);
+
+                    for (let y = -20; y < height + 20; y += 18) {
+                        drawWavyBand(ctx, width, y + rand() * 18, 4 + rand() * 9, rand() > 0.45 ? '#fff6b5' : '#a72207', 0.16 + rand() * 0.18, rand() * 12, 18);
+                    }
+
+                    for (let i = 0; i < 420; i++) {
+                        const size = 7 + rand() * 28;
+                        drawSoftEllipse(ctx, rand() * width, rand() * height, size, size * (0.35 + rand() * 0.5), rand() > 0.55 ? '#fff0a0' : '#b52a08', 0.07 + rand() * 0.13, rand() * Math.PI);
+                    }
+
+                    for (let i = 0; i < 18; i++) {
+                        const radiusX = 34 + rand() * 96;
+                        const radiusY = 8 + rand() * 20;
+                        drawSoftEllipse(ctx, rand() * width, rand() * height, radiusX, radiusY, '#4f1006', 0.18 + rand() * 0.22, rand() * Math.PI);
+                        drawSoftEllipse(ctx, rand() * width, rand() * height, radiusX * 0.7, radiusY * 0.45, '#ffe27a', 0.08 + rand() * 0.1, rand() * Math.PI);
+                    }
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    return setTextureQuality(texture);
+                }
+
+                function createSunCoronaTexture() {
+                    const canvas = document.createElement('canvas');
+                    const size = 512;
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    const center = size / 2;
+                    const gradient = ctx.createRadialGradient(center, center, 42, center, center, center);
+
+                    gradient.addColorStop(0, 'rgba(255, 250, 202, 0.9)');
+                    gradient.addColorStop(0.24, 'rgba(255, 184, 61, 0.45)');
+                    gradient.addColorStop(0.58, 'rgba(255, 102, 20, 0.18)');
+                    gradient.addColorStop(1, 'rgba(255, 102, 20, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, size, size);
+
+                    const rand = seededRandom(993);
+                    ctx.save();
+                    ctx.translate(center, center);
+                    for (let i = 0; i < 56; i++) {
+                        const angle = (Math.PI * 2 * i) / 56 + rand() * 0.09;
+                        const length = 120 + rand() * 126;
+                        const width = 8 + rand() * 22;
+                        ctx.rotate(angle);
+                        const rayGradient = ctx.createLinearGradient(70, 0, length, 0);
+                        rayGradient.addColorStop(0, 'rgba(255, 226, 111, 0.22)');
+                        rayGradient.addColorStop(1, 'rgba(255, 111, 21, 0)');
+                        ctx.fillStyle = rayGradient;
+                        ctx.beginPath();
+                        ctx.moveTo(62, -width * 0.35);
+                        ctx.quadraticCurveTo(length * 0.72, -width, length, 0);
+                        ctx.quadraticCurveTo(length * 0.72, width, 62, width * 0.35);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.rotate(-angle);
+                    }
+                    ctx.restore();
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    return setTextureQuality(texture);
+                }
 
                 // Earth
-                const earthGeo = new THREE.SphereGeometry(1.5, 64, 64);
-                const earthTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
-                const earthMat = new THREE.MeshPhongMaterial({ map: earthTex, shininess: 10, bumpScale: 0.05 });
+                const earthGeo = new THREE.SphereGeometry(1.5, 128, 128); // Segmen lebih tinggi agar sangat halus
+                const earthTex = setTextureQuality(textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'));
+                const earthMat = new THREE.MeshPhongMaterial({ 
+                    map: earthTex, 
+                    bumpMap: earthTex,
+                    bumpScale: 0.05,
+                    shininess: 20, 
+                    color: 0xffffff 
+                });
                 const earth = new THREE.Mesh(earthGeo, earthMat);
                 
                 // Earth Pivot (for Orbit)
@@ -502,37 +797,82 @@
                 orbitGroup.add(earthOrbit);
 
                 // Moon (for Dark Mode)
-                const moonGeo = new THREE.SphereGeometry(0.35, 32, 32);
-                const moonTex = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg');
-                const moonMat = new THREE.MeshPhongMaterial({ map: moonTex });
+                const moonGeo = new THREE.SphereGeometry(0.35, 64, 64);
+                const moonTex = setTextureQuality(textureLoader.load(`${planetTextureBase}moon_1024.jpg`));
+                const moonMat = new THREE.MeshPhongMaterial({ 
+                    map: moonTex,
+                    bumpMap: moonTex,
+                    bumpScale: 0.02,
+                    shininess: 10 
+                });
                 const moon = new THREE.Mesh(moonGeo, moonMat);
                 earth.add(moon); // Moon orbits Earth
                 
                 // Sun (The Center)
-                const sunGeo = new THREE.SphereGeometry(6, 64, 64);
-                const sunMat = new THREE.MeshBasicMaterial({ color: 0xffcc33 });
+                const sunSurfaceTexture = createSunTexture();
+                const sunGeo = new THREE.SphereGeometry(6, 96, 96);
+                const sunMat = new THREE.MeshPhongMaterial({
+                    map: sunSurfaceTexture,
+                    bumpMap: sunSurfaceTexture,
+                    bumpScale: 0.11,
+                    color: 0xffffff,
+                    emissive: 0xff6a00,
+                    emissiveMap: sunSurfaceTexture,
+                    emissiveIntensity: 1.25,
+                    shininess: 2,
+                    specular: 0x220800
+                });
                 const sun = new THREE.Mesh(sunGeo, sunMat);
                 sunGroup.add(sun);
 
-                textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/sun.jpg', (texture) => {
+                const sunCoronaMat = new THREE.SpriteMaterial({
+                    map: createSunCoronaTexture(),
+                    color: 0xffb13b,
+                    transparent: true,
+                    opacity: 0.5,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const sunCorona = new THREE.Sprite(sunCoronaMat);
+                sunCorona.scale.set(19, 19, 1);
+                sunGroup.add(sunCorona);
+
+                textureLoader.load(`${planetTextureBase}sun.jpg`, (texture) => {
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    setTextureQuality(texture);
                     sunMat.map = texture;
-                    sunMat.color.set(0xffffff);
+                    sunMat.bumpMap = texture;
+                    sunMat.emissiveMap = texture;
                     sunMat.needsUpdate = true;
+                }, undefined, () => {
+                    console.warn('Sun texture failed to load, using generated plasma texture.');
                 });
 
                 // Helper function to create planets with accurate textures
-                const createPlanet = (size, textureUrl, dist, speed, hasRings = false) => {
-                    const geo = new THREE.SphereGeometry(size, 32, 32);
+                const createPlanet = (size, textureKey, textureUrl, dist, speed, options = {}) => {
+                    const geo = new THREE.SphereGeometry(size, 64, 64); // Tingkatkan segmen untuk semua planet
+                    const fallbackTexture = createPlanetTexture(textureKey);
+                    const bumpScale = options.bumpScale ?? size * 0.04;
                     const mat = new THREE.MeshPhongMaterial({ 
-                        shininess: 5,
-                        color: 0x444444 // Fallback color agar tidak hitam saat loading
+                        map: fallbackTexture,
+                        bumpMap: fallbackTexture,
+                        bumpScale,
+                        color: 0xffffff,
+                        shininess: options.shininess ?? 12,
+                        specular: options.specular ?? 0x111111
                     });
                     const mesh = new THREE.Mesh(geo, mat);
                     
                     textureLoader.load(textureUrl, (tex) => {
+                        setTextureQuality(tex);
                         mat.map = tex;
-                        mat.color.set(0xffffff); // Hapus fallback setelah tekstur siap
+                        mat.bumpMap = tex; // Gunakan tekstur sebagai bumpMap untuk efek "hidup"
+                        mat.bumpScale = options.loadedBumpScale ?? bumpScale;
+                        mat.color.set(0xffffff); // Ubah ke putih agar warna asli tekstur keluar 100%
                         mat.needsUpdate = true;
+                    }, undefined, () => {
+                        console.warn(`Planet texture failed to load, using generated texture: ${textureUrl}`);
                     });
 
                     // Orbit ring visualizer
@@ -542,9 +882,17 @@
                     orbit.rotation.x = Math.PI / 2;
                     orbitGroup.add(orbit);
                     
-                    if (hasRings) {
+                    if (options.hasRings) {
                         const ringGeo = new THREE.RingGeometry(size * 1.4, size * 2.2, 64);
-                        const ringMat = new THREE.MeshBasicMaterial({ color: 0x908d81, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+                        const ringMat = new THREE.MeshPhongMaterial({
+                            map: createSaturnRingTexture(),
+                            color: 0xffffff,
+                            side: THREE.DoubleSide,
+                            transparent: true,
+                            opacity: 0.55,
+                            shininess: 6,
+                            specular: 0x111111
+                        });
                         const ring = new THREE.Mesh(ringGeo, ringMat);
                         ring.rotation.x = Math.PI / 2.2;
                         mesh.add(ring);
@@ -554,13 +902,13 @@
                 };
 
                 const planets = [
-                    createPlanet(0.4, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mercury.jpg', 10, 0.008),
-                    createPlanet(0.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/venus_surface.jpg', 16, 0.005),
-                    createPlanet(0.9, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars.jpg', 28, 0.003),
-                    createPlanet(2.5, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter.jpg', 42, 0.001),
-                    createPlanet(2.0, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true),
-                    createPlanet(1.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/uranus.jpg', 72, 0.0006),
-                    createPlanet(1.1, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/neptune.jpg', 86, 0.0004)
+                    createPlanet(0.4, 'mercury', `${planetTextureBase}mercury.jpg`, 10, 0.008, { bumpScale: 0.026, shininess: 8 }),
+                    createPlanet(0.8, 'venus', `${planetTextureBase}venus.jpg`, 16, 0.005, { bumpScale: 0.024, shininess: 10 }),
+                    createPlanet(0.9, 'mars', `${planetTextureBase}mars_1k_color.jpg`, 28, 0.003, { bumpScale: 0.04, shininess: 9 }),
+                    createPlanet(2.5, 'jupiter', `${planetTextureBase}jupiter.jpg`, 42, 0.001, { bumpScale: 0.035, shininess: 5, specular: 0x0b0b0b }),
+                    createPlanet(2.0, 'saturn', `${planetTextureBase}saturn.jpg`, 56, 0.0008, { bumpScale: 0.03, shininess: 6, specular: 0x0b0b0b, hasRings: true }),
+                    createPlanet(1.2, 'uranus', `${planetTextureBase}uranus.jpg`, 72, 0.0006, { bumpScale: 0.018, shininess: 12 }),
+                    createPlanet(1.1, 'neptune', `${planetTextureBase}neptune.jpg`, 86, 0.0004, { bumpScale: 0.022, shininess: 14 })
                 ];
 
                 planets.forEach(p => {
@@ -573,12 +921,12 @@
                 sunGroup.add(sunPointLight);
 
                 // Lighting
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
                 scene.add(ambientLight);
                 
-                const blueLight = new THREE.DirectionalLight(0x3b82f6, 2.5);
-                blueLight.position.set(5, 3, 5);
-                scene.add(blueLight);
+                const mainLight = new THREE.DirectionalLight(0xffffff, 2.0); // Turunkan agar tidak overexposed
+                mainLight.position.set(20, 10, 20);
+                scene.add(mainLight);
 
                 focusedPlanetMesh = solarEarthMesh; // Mulai dengan Bumi
 
@@ -613,6 +961,9 @@
 
                     earth.rotation.y += 0.005;
                     sun.rotation.y += 0.001;
+                    if (sunMat.map) sunMat.map.offset.x += 0.00008;
+                    sunCoronaMat.rotation += 0.0012;
+                    sunCoronaMat.opacity = 0.46 + Math.sin(time * 4) * 0.06;
                     solarEarthPivot.rotation.y += 0.002;
                     
                     // Rotasi global tata surya berdasarkan scroll
@@ -640,8 +991,12 @@
                         const cameraOffset = new THREE.Vector3(sizeFactor * 2.5, sizeFactor * 0.8, sizeFactor * 4.5);
                         finalCameraPos.copy(finalLookAt).add(cameraOffset);
                     } else {
-                        // Overview Solar System
-                        finalCameraPos.set(0, 70, 150);
+                    // Overview Solar System with Zoom-in effect towards Sun
+                    const scrollProgress = Math.min(scrollRotation.value / (Math.PI * 2), 1);
+                    const startPos = new THREE.Vector3(0, 70, 150); // Posisi awal jauh
+                    const endPos = new THREE.Vector3(0, 15, 40);    // Posisi mendekat ke matahari
+                    
+                    finalCameraPos.lerpVectors(startPos, endPos, scrollProgress);
                         finalLookAt.set(0, 0, 0);
                     }
 
