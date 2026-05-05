@@ -125,6 +125,22 @@ body[data-theme="light"] #services {
     background-size: 50px 50px;
     mask-image: radial-gradient(circle at center, black, transparent 80%);
     will-change: transform;
+    position: relative;
+}
+
+.hero-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(1px 1px at 20% 30%, #ffffff, transparent),
+        radial-gradient(1.5px 1.5px at 50% 70%, #ffffff, transparent),
+        radial-gradient(1px 1px at 80% 40%, #ffffff, transparent),
+        radial-gradient(1px 1px at 30% 80%, #ffffff, transparent),
+        radial-gradient(1.5px 1.5px at 70% 15%, #ffffff, transparent);
+    background-size: 300px 300px;
+    animation: stars-twinkle 5s infinite ease-in-out;
+    pointer-events: none;
 }
 
 /* Earth Background Styling */
@@ -291,4 +307,9 @@ body[data-theme="light"] .btn-primary-lg {
 @keyframes fire-flicker {
     0% { filter: drop-shadow(0 0 5px #ff4500) drop-shadow(0 0 10px #ff8c00); }
     100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 20px #ff4500); }
+}
+
+@keyframes stars-twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
 }

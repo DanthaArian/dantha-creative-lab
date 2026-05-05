@@ -378,6 +378,7 @@
                 document.body.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
+                if (window.update3DTheme) window.update3DTheme(newTheme);
             };
 
             // Animation logic using View Transitions API
@@ -462,41 +463,132 @@
                 }
 
                 const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                // FOV diperkecil ke 50 untuk mengurangi distorsi "lonjong" di pinggir layar
+                const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
                 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                 
                 renderer.setSize(container.clientWidth, container.clientHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
                 container.appendChild(renderer.domElement);
 
-                // Create Earth Sphere
-                const geometry = new THREE.SphereGeometry(1.5, 64, 64);
+                const globeGroup = new THREE.Group();
+                scene.add(globeGroup);
+
                 const textureLoader = new THREE.TextureLoader();
-                const earthTexture = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+
+                // Earth
+                const earthGeo = new THREE.SphereGeometry(1.5, 64, 64);
+                const earthTex = textureLoader.load('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+                const earthMat = new THREE.MeshPhongMaterial({ map: earthTex, shininess: 10, bumpScale: 0.05 });
+                const earth = new THREE.Mesh(earthGeo, earthMat);
+                globeGroup.add(earth);
+
+                // Moon (for Dark Mode)
+                const moonGeo = new THREE.SphereGeometry(0.35, 32, 32);
+                const moonTex = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg');
+                const moonMat = new THREE.MeshPhongMaterial({ map: moonTex });
+                const moon = new THREE.Mesh(moonGeo, moonMat);
                 
-                const material = new THREE.MeshPhongMaterial({
-                    map: earthTexture,
-                    shininess: 10,
-                    bumpScale: 0.05
+                // Sun (for Light Mode) - Enhanced Visuals
+                const sunGeo = new THREE.SphereGeometry(2.5, 64, 64);
+                const sunMat = new THREE.MeshBasicMaterial({ 
+                    color: 0xffdd44, // Warna kuning terang sebagai dasar
                 });
+                const sun = new THREE.Mesh(sunGeo, sunMat);
                 
-                const earth = new THREE.Mesh(geometry, material);
-                scene.add(earth);
+                // Surface Detail Layer (To make it not "plain")
+                const sunSurfaceGeo = new THREE.SphereGeometry(2.51, 64, 64);
+                const sunSurfaceMat = new THREE.MeshBasicMaterial({
+                    color: 0xff6600,
+                    transparent: true,
+                    opacity: 0.5,
+                    blending: THREE.AdditiveBlending,
+                });
+                const sunSurface = new THREE.Mesh(sunSurfaceGeo, sunSurfaceMat);
+                sun.add(sunSurface); // Attached to main sun
+
+                // Load tekstur secara async agar tidak hitam saat proses loading
+                textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/sun.jpg', (texture) => {
+                    sunMat.map = texture;
+                    sunMat.color.set(0xffffff);
+                    sunMat.needsUpdate = true;
+                    
+                    sunSurfaceMat.map = texture; // Use same texture for surface layer
+                    sunSurfaceMat.color.set(0xffaa00);
+                    sunSurfaceMat.needsUpdate = true;
+                });
+
+                // Position for perfect sphere look
+                sun.position.set(-7, 4, -18); 
+
+                // Sun Glow Atmosphere (Halo effect)
+                const sunGlowGeo = new THREE.SphereGeometry(2.8, 64, 64);
+                const sunGlowMat = new THREE.MeshBasicMaterial({ 
+                    color: 0xffaa00,
+                    transparent: true,
+                    opacity: 0.4,
+                    blending: THREE.AdditiveBlending,
+                    side: THREE.BackSide
+                });
+                const sunGlow = new THREE.Mesh(sunGlowGeo, sunGlowMat);
+                sunGlow.position.copy(sun.position);
+
+                // Sun Glow Light
+                const sunPointLight = new THREE.PointLight(0xffdd44, 20, 100);
+                sunPointLight.position.copy(sun.position);
 
                 // Lighting
                 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
                 scene.add(ambientLight);
                 
-                const sunLight = new THREE.DirectionalLight(0x3b82f6, 2.5);
-                sunLight.position.set(5, 3, 5);
-                scene.add(sunLight);
+                const blueLight = new THREE.DirectionalLight(0x3b82f6, 2.5);
+                blueLight.position.set(5, 3, 5);
+                scene.add(blueLight);
 
-                camera.position.z = 5;
+                // Theme Update Logic for 3D
+                window.update3DTheme = (theme) => {
+                    if (theme === 'dark') {
+                        globeGroup.add(moon);
+                        scene.remove(sun);
+                        scene.remove(sunGlow);
+                        scene.remove(sunPointLight);
+                        blueLight.intensity = 2.5;
+                    } else {
+                        globeGroup.remove(moon);
+                        scene.add(sun);
+                        scene.add(sunGlow);
+                        scene.add(sunPointLight);
+                        blueLight.intensity = 0.5;
+                    }
+                };
+
+                // Initial state
+                window.update3DTheme(document.body.getAttribute('data-theme') || 'dark');
+
+                camera.position.z = 6;
 
                 // Animation Loop
                 const animate = () => {
                     requestAnimationFrame(animate);
                     earth.rotation.y += 0.001; // Slow rotation
+                    
+                    if (sun.parent) {
+                        sun.rotation.y += 0.0015;
+                        sunSurface.rotation.y -= 0.002; // Reverse rotation for dynamic look
+                        sunSurface.rotation.z += 0.001;
+                        // Pulsating glow effect for more realism
+                        const scale = 1 + Math.sin(Date.now() * 0.001) * 0.05;
+                        sunGlow.scale.set(scale, scale, scale);
+                    }
+                    
+                    if (moon.parent) {
+                        const time = Date.now() * 0.0005;
+                        // Radius orbit sedikit diperkecil agar tidak terkena distorsi lensa di pinggir
+                        moon.position.x = Math.cos(time) * 2.8;
+                        moon.position.z = Math.sin(time) * 2.8;
+                        moon.rotation.y += 0.005;
+                    }
+
                     renderer.render(scene, camera);
                 };
                 animate();
@@ -511,7 +603,8 @@
                     }
                 });
 
-                earthTl.to(earth.scale, {
+                // Sekarang kita menggerakkan globeGroup, sehingga Bulan ikut membesar/mendekat
+                earthTl.to(globeGroup.scale, {
                     x: 6, y: 6, z: 6,
                     ease: "none"
                 }, 0);
