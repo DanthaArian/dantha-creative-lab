@@ -15,6 +15,19 @@ body {
     display: inline-block;
 }
 
+/* --- Cinematic Grain Overlay --- */
+.grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 999;
+}
+
 /* --- Custom Scrollbar Styling --- */
 ::-webkit-scrollbar {
     width: 18px; /* Diperlebar agar emoji kucing terlihat utuh */
@@ -73,7 +86,7 @@ body[data-theme="light"]::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
     background-color: #2563eb;
     color: white;
     padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
+    border-radius: 0.75rem;
     font-weight: 700;
     transition: all 0.3s;
 }
@@ -82,7 +95,7 @@ body[data-theme="light"]::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
     background-color: #2563eb;
     color: white;
     padding: 1rem 2.5rem;
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -94,7 +107,7 @@ body[data-theme="light"]::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     padding: 1rem 2.5rem;
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     font-weight: 700;
     transition: all 0.3s;
     display: inline-block;
@@ -129,33 +142,91 @@ body[data-theme="light"] {
     color: #0f172a;
 }
 
+/* Light Mode Planet Backgrounds */
+body[data-theme="light"] #home {
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+}
+
+body[data-theme="light"] #services {
+    background-image: linear-gradient(rgba(248, 250, 252, 0.92), rgba(248, 250, 252, 0.92)), 
+                      url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1920&q=80') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+body[data-theme="light"] #why-us {
+    background-color: #f1f5f9; /* Warna solid yang bersih untuk membedakan section */
+    background-image: none !important;
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+body[data-theme="light"] #portfolio {
+    background: linear-gradient(to bottom, #f8fafc, #f1f5f9, #f8fafc);
+}
+
+body[data-theme="light"] #contact {
+    background-color: transparent;
+}
+
+body[data-theme="light"] #cosmic-bg { display: none !important; }
+body[data-theme="light"] #earth-container { 
+    opacity: 0.7 !important; 
+    visibility: visible !important; 
+    filter: saturate(1.3) brightness(1.1) contrast(1.05);
+    /* Menggunakan teknik opacity untuk menjaga kejernihan planet di atas putih */
+    mix-blend-mode: normal; 
+}
+
+body[data-theme="dark"] #earth-container {
+    opacity: 0.6;
+    visibility: visible;
+}
+
 /* Melindungi keterbacaan teks saat tata surya aktif di mode terang */
 body[data-theme="light"] .hero-text h1,
-body[data-theme="light"] .hero-text p {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.5);
+body[data-theme="light"] .hero-text p,
+body[data-theme="light"] .trust-badges span {
     position: relative;
     z-index: 10;
+    color: #0f172a !important; 
+    text-shadow: none !important;
 }
 
-body[data-theme="light"] #main-nav { background-color: rgba(252, 252, 253, 0.8); border-color: rgba(15, 23, 42, 0.05); }
-body[data-theme="light"] #main-nav.scrolled { background-color: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); }
-body[data-theme="light"] .nav-link { color: #64748b; }
+body[data-theme="light"] #main-nav { 
+    background-color: rgba(255, 255, 255, 0.7); 
+    border-color: rgba(15, 23, 42, 0.05); 
+    backdrop-filter: blur(15px);
+}
+body[data-theme="light"] #main-nav.scrolled { 
+    background-color: rgba(255, 255, 255, 0.9); 
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); 
+}
+body[data-theme="light"] .nav-link { 
+    color: #475569; 
+}
 body[data-theme="light"] .nav-link:hover, body[data-theme="light"] .nav-link.active { color: #2563eb; }
+body[data-theme="light"] #theme-toggle, body[data-theme="light"] #lang-toggle { color: #1e293b; }
+
 body[data-theme="light"] .service-card { 
-    background-color: #ffffff; 
-    border-color: #f1f5f9; 
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.02), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    background-color: rgba(255, 255, 255, 0.6); 
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8); 
+    box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.08);
+    border-radius: 1.5rem; /* Lebih tumpul (rounded-2xl) */
 }
 body[data-theme="light"] .service-card:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    border-color: #3b82f6;
+    box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.12);
+    background-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-5px);
 }
 
-body[data-theme="light"] .text-slate-300,
-body[data-theme="light"] .text-slate-400,
-body[data-theme="light"] .text-slate-500 {
-    color: #475569 !important;
-}
+/* Warna teks mode terang yang lebih bersih & hierarkis */
+body[data-theme="light"] .text-slate-300 { color: #0f172a !important; } /* Main Sub-headline */
+body[data-theme="light"] .text-slate-400 { color: #1e293b !important; } /* Deskripsi Jasa */
+body[data-theme="light"] .text-slate-500,
+body[data-theme="light"] .portfolio-tag { color: #334155 !important; } /* Metadata / Project Tag */
 
 body[data-theme="light"] .text-white:not(.btn-primary-sm):not(.btn-primary-lg):not(.logo-dot):not(#contact *):not(.fab):not(.text-blue-600) {
     color: #0f172a !important;
@@ -163,12 +234,6 @@ body[data-theme="light"] .text-white:not(.btn-primary-sm):not(.btn-primary-lg):n
 
 body[data-theme="light"] .bg-white\/5 { background-color: rgba(15, 23, 42, 0.03); }
 body[data-theme="light"] .border-white\/10 { border-color: rgba(15, 23, 42, 0.08); }
-
-/* Overlay Layanan untuk Mode Terang agar teks tetap terlihat */
-body[data-theme="light"] #services {
-    background-image: linear-gradient(rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.95)), 
-                      url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1920&q=80');
-}
 
 .hero-grid {
     background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -196,8 +261,8 @@ body[data-theme="light"] #services {
 
 /* Earth Background Styling */
 #earth-container {
-    perspective: 1000px;
     pointer-events: none;
+    background: #030305;
 }
 
 #earth-container canvas {
@@ -278,6 +343,99 @@ body[data-theme="light"] .btn-primary-lg {
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
     transition: width 0.1s ease-out;
 }
+
+/* Cosmic Journey Dark Mode - Atmosphere Glows */
+.planet-moon {
+    background: radial-gradient(circle at 90% 30%, rgba(148, 163, 184, 0.1) 0%, transparent 60%);
+}
+
+.planet-mars {
+    background: radial-gradient(circle at 90% 30%, rgba(220, 38, 38, 0.1) 0%, transparent 60%);
+}
+
+.planet-jupiter {
+    background: radial-gradient(circle at 10% 60%, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+}
+
+.planet-saturn {
+    background: radial-gradient(circle at 80% 50%, rgba(148, 163, 184, 0.1) 0%, transparent 60%);
+}
+
+.planet-neptune {
+    background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 80%);
+}
+
+/* Starfield effect for cosmic bg */
+.stars-overlay {
+    background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0));
+    background-size: 200px 200px;
+}
+
+/* Planet Silhouette Visuals (Dark Mode Only) */
+.visual-mars {
+    background: radial-gradient(circle at 30% 30%, #ff4d4d 0%, #7f1d1d 70%, #450a0a 100%);
+    box-shadow: -20px -20px 50px rgba(220, 38, 38, 0.2);
+}
+
+.visual-jupiter {
+    background: 
+        repeating-linear-gradient(rgba(251, 191, 36, 0.1) 0px, rgba(120, 53, 15, 0.1) 20px, rgba(251, 191, 36, 0.1) 40px),
+        radial-gradient(circle at 30% 30%, #fbbf24 0%, #92400e 70%, #451a03 100%);
+    box-shadow: 20px 20px 60px rgba(217, 119, 6, 0.2);
+}
+
+.visual-saturn {
+    background: radial-gradient(circle at 30% 30%, #cbd5e1 0%, #475569 70%, #1e293b 100%);
+    position: relative;
+}
+
+/* Saturn's Ring */
+.visual-saturn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160%;
+    height: 40px;
+    background: rgba(148, 163, 184, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(-25deg);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.visual-neptune {
+    background: radial-gradient(circle at 30% 30%, #60a5fa 0%, #1e40af 70%, #1e1b4b 100%);
+    box-shadow: -30px 30px 70px rgba(29, 78, 216, 0.3);
+}
+
+/* Light Mode Enhancements */
+body[data-theme="light"] .visual-mars, 
+body[data-theme="light"] .visual-jupiter, 
+body[data-theme="light"] .visual-saturn, 
+body[data-theme="light"] .visual-neptune {
+    background: rgba(59, 130, 246, 0.03) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+/* Subtle Orbit Lines for Light Mode */
+body[data-theme="light"] section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    height: 80vw;
+    border: 1px dashed rgba(0, 0, 0, 0.03);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Performance: Disable cosmic-bg transitions on mobile */
+@media (max-width: 768px) { #cosmic-bg { display: none !important; } }
 
 /* Sophisticated Background Card Effect */
 .service-card {

@@ -22,8 +22,15 @@
     <!-- Interactive Cursor Glow -->
     <div id="cursor-glow" class="fixed w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none z-[1] transition-opacity duration-500 opacity-0"></div>
 
+    <!-- Cinematic Grain Overlay -->
+    <div class="grain-overlay"></div>
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- Global 3D Universe Container -->
+    <div id="earth-container" class="fixed inset-0 z-[0] pointer-events-none opacity-60 transition-opacity duration-1000"></div>
+    <div id="cosmic-bg" class="fixed inset-0 pointer-events-none z-[1] opacity-0 transition-opacity duration-1000 overflow-hidden"></div>
 
     <!-- Loading Screen -->
     <div id="loader" class="fixed inset-0 z-[999] bg-black flex items-center justify-center">
@@ -76,17 +83,13 @@
         <div id="smooth-content">
         
         <!-- Hero Section -->
-        <section id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
+        <section id="home" data-planet="earth" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
             <!-- Modern Background Elements -->
             <div class="absolute inset-0 z-0">
                 <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-blob"></div>
                 <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] animate-blob animation-delay-2000"></div>
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
                 <div class="hero-grid absolute -inset-[10%] opacity-[0.03] pointer-events-none"></div>
-                
-                <!-- Earth Element -->
-                <div id="earth-container" class="absolute inset-0 flex items-center justify-center z-[1] overflow-hidden opacity-60">
-                </div>
             </div>
             
             <div class="container mx-auto px-6 text-center z-10 hero-text relative">
@@ -132,10 +135,10 @@
         </section>
 
         <!-- Services Section -->
-        <section id="services" class="relative z-20 bg-[#020202] py-20 md:py-32 px-6">
+        <section id="services" data-planet="moon" class="relative z-20 bg-[#020202] py-20 md:py-32 px-6">
             <div class="container mx-auto px-6">
                 <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <div class="max-w-xl text-center md:text-left reveal-item" data-key="services_intro">
+                    <div class="max-w-xl text-center md:text-left reveal-item parallax-text" data-key="services_intro">
                         <h2 class="text-5xl font-bold mb-6">Our Creative <span class="text-blue-600">Power.</span></h2>
                         <p class="text-slate-400">Kami menawarkan eksekusi teknis terbaik untuk memastikan brand Anda tampil menonjol di dunia digital.</p>
                     </div>
@@ -144,25 +147,25 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Jasa 1 -->
-                    <div class="service-card reveal-item p-10 rounded-none bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                    <div class="service-card reveal-item p-10 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
                         <div class="w-16 h-16 rounded-2xl bg-blue-600/20 flex items-center justify-center mb-8 text-blue-500 text-3xl group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500"><i class="fas fa-palette"></i></div>
                         <h3 class="text-xl font-bold mb-2" data-key="service_graphic_title">Graphic Design</h3>
                         <p class="text-slate-400 text-sm mb-6" data-key="service_graphic_desc">Logo, branding, dan aset media sosial profesional.</p>
                         <div class="text-2xl font-black">Rp 50k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
                     </div>
-                    <div class="service-card reveal-item p-10 rounded-none bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                    <div class="service-card reveal-item p-10 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
                         <div class="w-16 h-16 rounded-2xl bg-purple-600/20 flex items-center justify-center mb-8 text-purple-500 text-3xl group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all duration-500"><i class="fas fa-video"></i></div>
                         <h3 class="text-xl font-bold mb-2" data-key="service_video_title">Video Editing</h3>
                         <p class="text-slate-400 text-sm mb-6" data-key="service_video_desc">Cinematic edit, Reels, dan video promosi premium.</p>
                         <div class="text-2xl font-black">Rp 100k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
                     </div>
-                    <div class="service-card reveal-item p-10 rounded-none bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                    <div class="service-card reveal-item p-10 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
                         <div class="w-16 h-16 rounded-2xl bg-cyan-600/20 flex items-center justify-center mb-8 text-cyan-500 text-3xl group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-500"><i class="fas fa-laptop-code"></i></div>
                         <h3 class="text-xl font-bold mb-2" data-key="service_simple_web_title">Simple Website</h3>
                         <p class="text-slate-400 text-sm mb-6" data-key="service_simple_web_desc">Landing page responsif dan cepat untuk bisnis kecil.</p>
                         <div class="text-2xl font-black">Rp 600k<span class="text-sm font-normal text-slate-500" data-key="service_starts_from"> /mulai</span></div>
                     </div>
-                    <div class="service-card reveal-item p-10 rounded-none bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
+                    <div class="service-card reveal-item p-10 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] transition-all duration-500 group interactive-card">
                         <div class="w-16 h-16 rounded-2xl bg-green-600/20 flex items-center justify-center mb-8 text-green-500 text-3xl group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white transition-all duration-500"><i class="fas fa-rocket"></i></div>
                         <h3 class="text-xl font-bold mb-2" data-key="service_complex_web_title">Complex Web</h3>
                         <p class="text-slate-400 text-sm mb-6" data-key="service_complex_web_desc">E-commerce & sistem web kustom skala besar.</p>
@@ -173,7 +176,7 @@
         </section>
 
         <!-- Why Choose Us -->
-        <section id="why-us" class="py-20 md:py-32 bg-white/5">
+        <section id="why-us" data-planet="mars" class="py-20 md:py-32 bg-white/5">
             <div class="container mx-auto px-6">
                 <h2 class="text-center text-3xl font-bold mb-16" data-key="why_us_title">Why Dantha Lab?</h2>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
@@ -202,37 +205,37 @@
         </section>
 
         <!-- Portfolio Preview -->
-        <section id="portfolio" class="py-20 md:py-32 px-6">
+        <section id="portfolio" data-planet="jupiter" class="py-20 md:py-32 px-6">
             <div class="container mx-auto px-6">
-                <h2 class="text-5xl font-bold mb-16" data-key="portfolio_title">Selected <span class="text-blue-600">Work.</span></h2>
+                <h2 class="text-5xl font-bold mb-16 parallax-text" data-key="portfolio_title">Selected <span class="text-blue-600">Work.</span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <a href="https://kopi-kita-indol.vercel.app/" target="_blank" class="group overflow-hidden rounded-none reveal-item block">
-                        <div class="relative overflow-hidden">
+                    <a href="https://kopi-kita-indol.vercel.app/" target="_blank" class="group overflow-hidden rounded-xl reveal-item block">
+                        <div class="relative overflow-hidden rounded-2xl">
                             <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span class="px-6 py-2 bg-white text-black font-bold rounded-full" data-key="portfolio_view_project">View Project</span>
+                                <span class="px-6 py-2 bg-white text-black font-bold rounded-lg" data-key="portfolio_view_project">View Project</span>
                             </div>
                         </div>
                         <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_kopi_title">Kopi Kita</h3>
                         <p class="text-slate-500" data-key="portfolio_project_kopi_tag">Website / 2026</p>
                     </a>
-                    <div class="group cursor-pointer overflow-hidden rounded-none reveal-item">
-                        <div class="relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
+                    <a href="https://fit-with-raka.vercel.app/" target="_blank" class="group overflow-hidden rounded-xl reveal-item block">
+                        <div class="relative overflow-hidden rounded-2xl">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span class="px-6 py-2 bg-white text-black font-bold rounded-full" data-key="portfolio_view_project">View Project</span>
+                                <span class="px-6 py-2 bg-white text-black font-bold rounded-lg" data-key="portfolio_view_project">View Project</span>
                             </div>
                         </div>
-                        <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_nexus_title">Nexus SaaS Platform</h3>
-                        <p class="text-slate-500" data-key="portfolio_project_nexus_tag">Website / 2026</p>
-                    </div>
+                        <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_raka_title">Fit with Raka</h3>
+                        <p class="text-slate-500" data-key="portfolio_project_raka_tag">Website / 2026</p>
+                    </a>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 md:py-32 px-6">
-            <div class="container mx-auto px-6 bg-gradient-to-br from-blue-600 to-purple-800 rounded-none p-10 lg:p-24 text-center relative">
+        <section id="contact" data-planet="saturn" class="py-20 md:py-32 px-6">
+            <div class="container mx-auto px-6 bg-gradient-to-br from-blue-600 to-purple-800 rounded-[2.5rem] p-10 lg:p-24 text-center relative">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
@@ -285,6 +288,8 @@
                 service_starts_from: " /mulai", portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
                 portfolio_project_kopi_title: "Kopi Kita",
                 portfolio_project_kopi_tag: "Website / 2026",
+                portfolio_project_raka_title: "Fit with Raka",
+                portfolio_project_raka_tag: "Website / 2026",
                 contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             },
             en: {
@@ -302,6 +307,8 @@
                 service_starts_from: " /starts", portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
                 portfolio_project_kopi_title: "Kopi Kita",
                 portfolio_project_kopi_tag: "Website / 2026",
+                portfolio_project_raka_title: "Fit with Raka",
+                portfolio_project_raka_tag: "Website / 2026",
                 contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             }
         };
@@ -453,6 +460,7 @@
 
                 // Camera Target for smooth transitions
                 const cameraTarget = new THREE.Vector3(0, 0, 0);
+                let focusedPlanetMesh = null; // Planet yang sedang aktif di layar
                 let solarEarthMesh, solarEarthPivot;
 
                 // Helper for World Position
@@ -548,9 +556,9 @@
                 const planets = [
                     createPlanet(0.4, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mercury.jpg', 10, 0.008),
                     createPlanet(0.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/venus_surface.jpg', 16, 0.005),
-                    createPlanet(0.7, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars.jpg', 28, 0.003),
-                    createPlanet(2.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter.jpg', 42, 0.001),
-                    createPlanet(1.8, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true),
+                    createPlanet(0.9, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/mars.jpg', 28, 0.003),
+                    createPlanet(2.5, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/jupiter.jpg', 42, 0.001),
+                    createPlanet(2.0, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/saturn.jpg', 56, 0.0008, true),
                     createPlanet(1.2, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/uranus.jpg', 72, 0.0006),
                     createPlanet(1.1, 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/neptune.jpg', 86, 0.0004)
                 ];
@@ -572,62 +580,31 @@
                 blueLight.position.set(5, 3, 5);
                 scene.add(blueLight);
 
+                focusedPlanetMesh = solarEarthMesh; // Mulai dengan Bumi
+
                 let activeThemeTween = null;
-                let scrollZoom = { value: 0 }; // Variabel proxy untuk scroll progress
+                let scrollRotation = { value: 0 }; // Proxy untuk rotasi berdasarkan scroll
                 const clock = new THREE.Clock();
 
-                window.transitionToLight = () => {
-                    if (activeThemeTween) activeThemeTween.kill();
-                    
-                    solarSystemGroup.visible = true;
-                    const earthWorldPos = getSolarEarthWorldPosition();
+                // GSAP ScrollTrigger untuk rotasi sistem tata surya secara global
+                gsap.to(scrollRotation, {
+                    scrollTrigger: {
+                        trigger: "body",
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: 1.5
+                    },
+                    value: Math.PI * 2 // Berputar 360 derajat sepanjang halaman
+                });
 
-                    activeThemeTween = gsap.timeline({ defaults: { ease: "power3.inOut" } });
-
-                    activeThemeTween
-                        // TAHAP 1: Fokus tetap di Bumi sambil mundur
-                        .to(camera.position, {
-                            x: earthWorldPos.x * 0.5,
-                            y: 10,
-                            z: 30,
-                            duration: 1.2
-                        }, 0)
-                        .to(cameraTarget, {
-                            x: earthWorldPos.x,
-                            y: earthWorldPos.y,
-                            z: earthWorldPos.z,
-                            duration: 1.2
-                        }, 0)
-                        .to(camera.position, {
-                            x: 0, y: 50, z: 120,
-                            duration: 1.8
-                        }, 1.0)
-                        .to(cameraTarget, {
-                            x: 0, y: 0, z: 0,
-                            duration: 1.8
-                        }, 1.0);
-                };
-
-                window.transitionToDark = () => {
-                    if (activeThemeTween) activeThemeTween.kill();
-                    const earthWorldPos = getSolarEarthWorldPosition();
-
-                    activeThemeTween = gsap.timeline({ defaults: { ease: "power3.inOut" } });
-
-                    activeThemeTween
-                        .to(cameraTarget, {
-                            x: earthWorldPos.x, y: earthWorldPos.y, z: earthWorldPos.z,
-                            duration: 1.2
-                        }, 0)
-                        .to(camera.position, {
-                            x: earthWorldPos.x + 5, y: earthWorldPos.y + 1, z: earthWorldPos.z + 10,
-                            duration: 1.5
-                        }, 0);
-                };
-
+                // Simplified Theme Transition: Let the animate loop handle the smooth lerp
                 window.transition3DTheme = (theme) => {
-                    if (theme === 'light') window.transitionToLight();
-                    else window.transitionToDark();
+                    const opacity = theme === 'light' ? 0.15 : 0.6;
+                    gsap.to(container, { 
+                        opacity: opacity, 
+                        duration: 1.5,
+                        ease: "power2.inOut"
+                    });
                 };
 
                 const animate = () => {
@@ -637,6 +614,9 @@
                     earth.rotation.y += 0.005;
                     sun.rotation.y += 0.001;
                     solarEarthPivot.rotation.y += 0.002;
+                    
+                    // Rotasi global tata surya berdasarkan scroll
+                    solarSystemGroup.rotation.y = scrollRotation.value;
                     
                     planets.forEach(p => {
                         p.mesh.position.x = Math.cos(time * p.speed * 100) * p.dist;
@@ -650,22 +630,24 @@
 
                     // Scroll Zoom Logic (only if not transitioning)
                     const currentTheme = document.body.getAttribute('data-theme');
-                    const earthPos = getSolarEarthWorldPosition();
+                    const finalCameraPos = new THREE.Vector3();
+                    const finalLookAt = new THREE.Vector3();
 
-                    if (!activeThemeTween || !activeThemeTween.isActive()) {
-                        if (currentTheme === 'dark') {
-                            const endOffset = new THREE.Vector3(1.5, 0.5, 3.5);
-                            const startOffset = new THREE.Vector3(5, 1, 10);
-                            const currentOffset = new THREE.Vector3().lerpVectors(startOffset, endOffset, scrollZoom.value);
-                            camera.position.lerp(earthPos.clone().add(currentOffset), 0.08);
-                            cameraTarget.lerp(earthPos, 0.1);
-                        } else {
-                            const startPos = new THREE.Vector3(0, 50, 120);
-                            const endPos = new THREE.Vector3(0, 5, 20);
-                            camera.position.lerp(new THREE.Vector3().lerpVectors(startPos, endPos, scrollZoom.value), 0.08);
-                            cameraTarget.lerp(new THREE.Vector3(0, 0, 0), 0.1);
-                        }
+                    if (currentTheme === 'dark') {
+                        // Focus on Planet
+                        focusedPlanetMesh.getWorldPosition(finalLookAt);
+                        const sizeFactor = focusedPlanetMesh.geometry.parameters.radius;
+                        const cameraOffset = new THREE.Vector3(sizeFactor * 2.5, sizeFactor * 0.8, sizeFactor * 4.5);
+                        finalCameraPos.copy(finalLookAt).add(cameraOffset);
+                    } else {
+                        // Overview Solar System
+                        finalCameraPos.set(0, 70, 150);
+                        finalLookAt.set(0, 0, 0);
                     }
+
+                    // Constantly lerp towards the state-based target for maximum smoothness
+                    camera.position.lerp(finalCameraPos, 0.04);
+                    cameraTarget.lerp(finalLookAt, 0.05);
 
                     camera.lookAt(cameraTarget);
                     renderer.render(scene, camera);
@@ -681,29 +663,25 @@
                     camera.position.set(0, 50, 120);
                     cameraTarget.set(0, 0, 0);
                 }
+                
+                // Exposed Global Function for Planet Switching
+                window.update3DPlanetFocus = (planetName) => {
+                    // We track the focused planet even in light mode so transition back is seamless
 
-                // GSAP Scroll Integration
-                const earthTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: "#home",
-                        start: "top top",
-                        end: "bottom top",
-                        scrub: 1.5,
+                    switch(planetName) {
+                        case 'earth': focusedPlanetMesh = solarEarthMesh; break;
+                        case 'moon': focusedPlanetMesh = moon; break;
+                        case 'mars': focusedPlanetMesh = planets[2].mesh; break;
+                        case 'jupiter': focusedPlanetMesh = planets[3].mesh; break;
+                        case 'saturn': focusedPlanetMesh = planets[4].mesh; break;
+                        case 'neptune': focusedPlanetMesh = planets[6].mesh; break;
                     }
-                });
 
-                // Gunakan timeline untuk menggerakkan variabel scrollZoom saja
-                earthTl.to(scrollZoom, {
-                    value: 1,
-                    ease: "power2.inOut"
-                }, 0);
-
-                earthTl.to(container, {
-                    opacity: 0,
-                    y: 100,
-                    filter: "blur(10px)",
-                    ease: "power1.in"
-                });
+                    // Fade effect saat ganti planet
+                    if (document.body.getAttribute('data-theme') === 'dark') { // Hanya terapkan blur di dark mode
+                        gsap.fromTo(container, { filter: "blur(10px)", opacity: 0.3 }, { filter: "blur(0px)", opacity: 0.6, duration: 1.5 });
+                    }
+                };
 
                 // Resize Handler
                 window.addEventListener('resize', () => {
@@ -891,7 +869,37 @@
                     ease: "power2.out"
                 });
             });
+
+            // Cosmic Journey Background Switcher
+            gsap.utils.toArray("section[data-planet]").forEach(section => {
+                const planet = section.getAttribute('data-planet');
+                
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: "top 80%",
+                    end: "bottom center",
+                    onEnter: () => {
+                        if (window.update3DPlanetFocus) window.update3DPlanetFocus(planet);
+                    },
+                    onEnterBack: () => {
+                        if (window.update3DPlanetFocus) window.update3DPlanetFocus(planet);
+                    },
+                });
+            });
+
+            // New: Text Parallax Animation
+            gsap.utils.toArray(".parallax-text").forEach(text => {
+                gsap.to(text, {
+                    scrollTrigger: {
+                        trigger: text,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    },
+                    y: -50,
+                    ease: "none"
+                });
+            });
         }
     </script>
-</body>
 </html>
