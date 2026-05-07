@@ -176,7 +176,7 @@ body[data-theme="light"]::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
 
 /* --- Theme Transition & Light Mode --- */
 body[data-theme="light"] {
-    background-color: #f8fafc; /* Warna off-white yang lebih empuk di mata */
+    background-color: #f8fafc; /* Softer off-white color for eye comfort */
     color: #0f172a;
 }
 
@@ -194,7 +194,7 @@ body[data-theme="light"] #services {
 }
 
 body[data-theme="light"] #why-us {
-    background-color: #f1f5f9; /* Warna solid yang bersih untuk membedakan section */
+    background-color: #f1f5f9; /* Clean solid color to distinguish sections */
     background-image: none !important;
     border-top: 1px solid rgba(15, 23, 42, 0.05);
     border-bottom: 1px solid rgba(15, 23, 42, 0.05);
@@ -213,7 +213,7 @@ body[data-theme="light"] #earth-container {
     opacity: 0.7 !important; 
     visibility: visible !important; 
     filter: saturate(1.3) brightness(1.1) contrast(1.05);
-    /* Menggunakan teknik opacity untuk menjaga kejernihan planet di atas putih */
+    /* Use opacity techniques to maintain planet clarity on white backgrounds */
     mix-blend-mode: normal; 
 }
 
@@ -222,7 +222,7 @@ body[data-theme="dark"] #earth-container {
     visibility: visible;
 }
 
-/* Melindungi keterbacaan teks saat tata surya aktif di mode terang */
+/* Protect text readability when the solar system is active in light mode */
 body[data-theme="light"] .hero-text h1,
 body[data-theme="light"] .hero-text p,
 body[data-theme="light"] .trust-badges span {
@@ -252,7 +252,7 @@ body[data-theme="light"] .service-card {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.8); 
     box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.08);
-    border-radius: 1.5rem; /* Lebih tumpul (rounded-2xl) */
+    border-radius: 1.5rem; /* More rounded (rounded-2xl) */
 }
 body[data-theme="light"] .service-card:hover {
     box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.12);
@@ -260,9 +260,9 @@ body[data-theme="light"] .service-card:hover {
     transform: translateY(-5px);
 }
 
-/* Warna teks mode terang yang lebih bersih & hierarkis */
+/* Cleaner and more hierarchical text colors for light mode */
 body[data-theme="light"] .text-slate-300 { color: #0f172a !important; } /* Main Sub-headline */
-body[data-theme="light"] .text-slate-400 { color: #1e293b !important; } /* Deskripsi Jasa */
+body[data-theme="light"] .text-slate-400 { color: #1e293b !important; } /* Service Description */
 body[data-theme="light"] .text-slate-500,
 body[data-theme="light"] .portfolio-tag { color: #334155 !important; } /* Metadata / Project Tag */
 
@@ -338,15 +338,15 @@ body[data-theme="light"] .border-white\/10 { border-color: rgba(15, 23, 42, 0.08
 /* Disable fixed background and cursor glow on mobile for performance */
 @media (max-width: 768px) {
     #services {
-        background-attachment: scroll; /* Fixed BG sangat berat di mobile browser */
+        background-attachment: scroll; /* Fixed BG is heavy on mobile browsers */
     }
     
     #cursor-glow {
-        display: none !important; /* Glow tidak natural di layar sentuh */
+        display: none !important; /* Glow feels unnatural on touch screens */
     }
     
     #earth-container {
-        display: none !important; /* Matikan 3D di mobile untuk performa */
+        display: none !important; /* Disable 3D on mobile for performance */
     }
 }
 
