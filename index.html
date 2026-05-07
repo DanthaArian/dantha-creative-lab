@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dantha Creative Lab membantu UMKM dan personal brand tampil profesional lewat desain, video, dan website yang cepat, simpel, dan ramah di kantong.">
     <title>Dantha Creative Lab | Digital Reality Agency</title>
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -40,7 +41,7 @@
     <!-- Navbar -->
     <nav class="fixed w-full z-[100] transition-all duration-300 py-3 bg-black/50 backdrop-blur-lg border-b border-white/10" id="main-nav">
         <div class="container mx-auto px-6 py-2 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-2 logo-link group relative z-10">
+            <a href="#home" class="flex items-center gap-2 logo-link group relative z-10" aria-label="Back to homepage">
                 <img src="logo dantha creative.png" alt="Dantha Logo" class="h-8 md:h-9 w-auto object-contain logo-img rounded-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
                 <div class="text-xl md:text-2xl font-black tracking-tighter">
                     <span class="gradient-text">DANTHA</span><span class="logo-dot text-white">.</span>
@@ -52,20 +53,26 @@
                 <a href="#portfolio" class="nav-link" data-key="nav_portfolio">Portfolio</a>
                 <a href="#contact" class="btn-primary-sm" data-key="nav_get_started">Get Started</a>
                 <div class="flex items-center space-x-2">
-                    <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
-                        <i class="fas fa-moon"></i>
+                    <button id="music-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors" aria-label="Toggle music">
+                        <i class="fas fa-volume-mute" aria-hidden="true"></i>
                     </button>
-                    <button id="lang-toggle" class="px-3 py-1 rounded-full text-sm font-bold text-slate-400 hover:text-white hover:bg-white/10 transition-colors uppercase">ID</button>
+                    <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors" aria-label="Toggle theme">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    <button id="lang-toggle" class="px-3 py-1 rounded-full text-sm font-bold text-slate-400 hover:text-white hover:bg-white/10 transition-colors uppercase" aria-label="Toggle language">ID</button>
                 </div>
             </div>
             <!-- Mobile Menu Toggle -->
             <div class="flex md:hidden items-center space-x-4">
-                <button id="lang-toggle-mobile" class="text-xs font-bold text-slate-400 uppercase">ID</button>
-                <button id="theme-toggle-mobile" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400">
-                    <i class="fas fa-moon"></i>
+                <button id="music-toggle-mobile" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400" aria-label="Toggle music">
+                    <i class="fas fa-volume-mute" aria-hidden="true"></i>
                 </button>
-                <button id="menu-toggle" class="text-white text-2xl focus:outline-none">
-                    <i class="fas fa-bars"></i>
+                <button id="lang-toggle-mobile" class="text-xs font-bold text-slate-400 uppercase" aria-label="Toggle language">ID</button>
+                <button id="theme-toggle-mobile" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400" aria-label="Toggle theme">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <button id="menu-toggle" class="text-white text-2xl focus:outline-none" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
@@ -102,7 +109,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 opacity-0 translate-y-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
+                    <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
                         <span data-key="hero_cta_consult">Konsultasi Gratis</span>
                     </a>
                     <a href="#services" class="btn-outline-lg w-full sm:w-auto magnetic-button">
@@ -209,9 +216,9 @@
             <div class="container mx-auto px-6">
                 <h2 class="text-5xl font-bold mb-16 parallax-text" data-key="portfolio_title">Selected <span class="text-blue-600">Work.</span></h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <a href="https://kopi-kita-indol.vercel.app/" target="_blank" class="group overflow-hidden rounded-xl reveal-item block">
+                    <a href="https://kopi-kita-indol.vercel.app/" target="_blank" rel="noopener noreferrer" class="portfolio-card group overflow-hidden rounded-xl reveal-item block">
                         <div class="relative overflow-hidden rounded-2xl">
-                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
+                            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="Preview website Kopi Kita" loading="lazy" decoding="async" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="px-6 py-2 bg-white text-black font-bold rounded-lg" data-key="portfolio_view_project">View Project</span>
                             </div>
@@ -219,9 +226,9 @@
                         <h3 class="mt-6 text-2xl font-bold" data-key="portfolio_project_kopi_title">Kopi Kita</h3>
                         <p class="text-slate-500" data-key="portfolio_project_kopi_tag">Website / 2026</p>
                     </a>
-                    <a href="https://fit-with-raka.vercel.app/" target="_blank" class="group overflow-hidden rounded-xl reveal-item block">
+                    <a href="https://fit-with-raka.vercel.app/" target="_blank" rel="noopener noreferrer" class="portfolio-card group overflow-hidden rounded-xl reveal-item block">
                         <div class="relative overflow-hidden rounded-2xl">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="Preview website Fit with Raka" loading="lazy" decoding="async" class="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="px-6 py-2 bg-white text-black font-bold rounded-lg" data-key="portfolio_view_project">View Project</span>
                             </div>
@@ -239,10 +246,10 @@
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" class="bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl">WHATSAPP US</a>
+                    <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" class="contact-cta bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl" data-key="contact_whatsapp">WHATSAPP US</a>
                     <div class="text-left">
                         <p class="text-white/70 text-sm uppercase font-bold tracking-widest" data-key="contact_follow_us">Follow Us</p>
-                        <a href="#" class="text-2xl font-bold">@danthacreative</a>
+                        <a href="https://instagram.com/danthacreative" target="_blank" rel="noopener noreferrer" class="text-2xl font-bold">@danthacreative</a>
                     </div>
                 </div>
             </div>
@@ -258,19 +265,34 @@
 
     <!-- Quick Contact Floating Buttons -->
     <div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
-        <a href="https://instagram.com/danthacreative" target="_blank" class="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
-            <i class="fab fa-instagram text-2xl text-white"></i>
+        <a href="https://instagram.com/danthacreative" target="_blank" rel="noopener noreferrer" aria-label="Open Dantha Creative Instagram" class="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+            <i class="fab fa-instagram text-2xl text-white" aria-hidden="true"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@danthacreative</span>
         </a>
-        <a href="https://wa.me/6285609205193" target="_blank" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
-            <i class="fab fa-whatsapp text-3xl text-white"></i>
+        <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" aria-label="Chat Dantha Creative via WhatsApp" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+            <i class="fab fa-whatsapp text-3xl text-white" aria-hidden="true"></i>
             <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Chat via WhatsApp</span>
         </a>
     </div>
 
+    <!-- Background Music -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="Timeless (Instrumental) - The Weeknd.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // Register ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
+        // Register ScrollTrigger when animation dependencies are available.
+        const supportsGsap = Boolean(window.gsap && window.ScrollTrigger);
+        if (supportsGsap) {
+            gsap.registerPlugin(ScrollTrigger);
+        }
+
+        function revealStaticContent() {
+            document.querySelectorAll('.hero-text > *, .reveal-item').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
 
         const translations = {
             id: {
@@ -290,7 +312,10 @@
                 portfolio_project_kopi_tag: "Website / 2026",
                 portfolio_project_raka_title: "Fit with Raka",
                 portfolio_project_raka_tag: "Website / 2026",
-                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
+                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>",
+                contact_whatsapp: "WHATSAPP KAMI",
+                contact_follow_us: "Ikuti Kami",
+                footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             },
             en: {
                 nav_home: "Home", nav_services: "Services", nav_portfolio: "Portfolio", nav_get_started: "Get Started",
@@ -309,7 +334,10 @@
                 portfolio_project_kopi_tag: "Website / 2026",
                 portfolio_project_raka_title: "Fit with Raka",
                 portfolio_project_raka_tag: "Website / 2026",
-                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>", footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
+                contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>",
+                contact_whatsapp: "WHATSAPP US",
+                contact_follow_us: "Follow Us",
+                footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             }
         };
 
@@ -406,18 +434,54 @@
         document.getElementById('lang-toggle').addEventListener('click', toggleLang);
         document.getElementById('lang-toggle-mobile').addEventListener('click', toggleLang);
 
+        // Music Toggle Logic
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-toggle');
+        const musicBtnMobile = document.getElementById('music-toggle-mobile');
+
+        function updateMusicIcons(isPlaying) {
+            const iconClass = isPlaying ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            musicBtn.querySelector('i').className = iconClass;
+            musicBtnMobile.querySelector('i').className = iconClass;
+            if (isPlaying) {
+                musicBtn.classList.add('text-blue-500');
+                musicBtnMobile.classList.add('text-blue-500');
+            } else {
+                musicBtn.classList.remove('text-blue-500');
+                musicBtnMobile.classList.remove('text-blue-500');
+            }
+        }
+
+        function toggleMusic() {
+            if (bgMusic.paused) { bgMusic.play(); updateMusicIcons(true); }
+            else { bgMusic.pause(); updateMusicIcons(false); }
+        }
+
+        musicBtn.addEventListener('click', toggleMusic);
+        musicBtnMobile.addEventListener('click', toggleMusic);
+
         // Mobile Menu Logic
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+        const setMobileMenuOpen = (isOpen) => {
+            mobileMenu.classList.toggle('hidden', !isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+            menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+        };
+        menuToggle.addEventListener('click', () => setMobileMenuOpen(mobileMenu.classList.contains('hidden')));
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileMenuOpen(false)));
 
         // Loader Animation
         window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initLanguage();
+            if (!supportsGsap) {
+                document.getElementById('loader').style.display = 'none';
+                revealStaticContent();
+                return;
+            }
             gsap.to("#loader", { opacity: 0, duration: 1, delay: 0.5, onComplete: () => {
                 document.getElementById('loader').style.display = 'none';
-                initTheme(); // Initialize theme before starting animations
-                initLanguage(); // Initialize language
                 startAnimations();
             }});
         });
@@ -430,6 +494,10 @@
             // Three.js Earth Implementation
             const initEarth3D = () => {
                 const container = document.getElementById('earth-container');
+                if (!window.THREE) {
+                    container.style.display = 'none';
+                    return;
+                }
                 
                 // Optimasi: Jangan jalankan Three.js jika di mobile/layar kecil
                 if (window.innerWidth < 768) {
