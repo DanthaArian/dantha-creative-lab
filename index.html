@@ -35,16 +35,16 @@
 
     <!-- Loading Screen -->
     <div id="loader" class="fixed inset-0 z-[999] bg-black flex items-center justify-center">
-        <img src="logo dantha creative.png" alt="Dantha Logo" class="h-20 w-auto animate-pulse object-contain rounded-2xl">
+        <img src="logo putih.png" alt="dCreative Lab Logo" class="h-20 w-auto animate-pulse object-contain rounded-2xl">
     </div>
 
     <!-- Navbar -->
     <nav class="fixed w-full z-[100] transition-all duration-300 py-3 bg-black/50 backdrop-blur-lg border-b border-white/10" id="main-nav">
         <div class="container mx-auto px-6 py-2 flex justify-between items-center">
             <a href="#home" class="flex items-center gap-2 logo-link group relative z-10" aria-label="Back to homepage">
-                <img src="logo dantha creative.png" alt="Dantha Logo" class="h-8 md:h-9 w-auto object-contain logo-img rounded-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
-                <div class="text-xl md:text-2xl font-black tracking-tighter">
-                    <span class="gradient-text">DANTHA</span><span class="logo-dot text-white">.</span>
+                <img src="logo putih.png" alt="dCreative Lab Logo" class="h-8 md:h-9 w-auto object-contain logo-img rounded-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                <div class="text-lg md:text-2xl font-black tracking-tight">
+                    <span class="gradient-text">dCreative</span><span class="logo-dot text-white"> Lab</span>
                 </div>
             </a>
             <div class="hidden md:flex items-center space-x-6 font-medium">
@@ -109,7 +109,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 opacity-0 translate-y-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
+                    <a href="https://wa.me/6285609205193?text=Halo%20Dantha%2C%20saya%20mau%20konsultasi%20untuk%20website%2Fdesain." target="_blank" rel="noopener noreferrer" class="btn-primary-lg glow-on-hover w-full sm:w-auto magnetic-button">
                         <span data-key="hero_cta_consult">Konsultasi Gratis</span>
                     </a>
                     <a href="#services" class="btn-outline-lg w-full sm:w-auto magnetic-button">
@@ -225,29 +225,33 @@
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-start">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 items-start">
                     <article class="testimonial-card reveal-item rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
-                        <img src="1.png" alt="Screenshot chat testimoni: makasih dekk" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
-                        <div class="p-5">
-                            <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-400 mb-3" data-key="testimonial_text_label">Teks di foto</p>
-                            <p class="text-xl font-black leading-tight" data-key="testimonial_1_quote">"makasih dekk"</p>
-                        </div>
+                        <button type="button" class="testimonial-lightbox-trigger" data-testimonial-index="0" aria-label="Buka preview testimoni 1">
+                            <img src="1.png" alt="Screenshot chat testimoni: makasih dekk" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
+                            <span class="testimonial-zoom-icon" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
+                        </button>
                     </article>
 
                     <article class="testimonial-card reveal-item rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
-                        <img src="2.png" alt="Screenshot chat testimoni: Oke dek pas" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
-                        <div class="p-5">
-                            <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-400 mb-3" data-key="testimonial_text_label">Teks di foto</p>
-                            <p class="text-xl font-black leading-tight" data-key="testimonial_2_quote">"Oke dek pas.."</p>
-                        </div>
+                        <button type="button" class="testimonial-lightbox-trigger" data-testimonial-index="1" aria-label="Buka preview testimoni 2">
+                            <img src="2.png" alt="Screenshot chat testimoni: Oke dek pas" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
+                            <span class="testimonial-zoom-icon" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
+                        </button>
                     </article>
 
                     <article class="testimonial-card reveal-item rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
-                        <img src="3.png" alt="Screenshot chat testimoni: Sudah dek dan makasih ya dek" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
-                        <div class="p-5">
-                            <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-400 mb-3" data-key="testimonial_text_label">Teks di foto</p>
-                            <p class="text-xl font-black leading-tight" data-key="testimonial_3_quote">"Sudah dek.. Makasih ya dek.."</p>
-                        </div>
+                        <button type="button" class="testimonial-lightbox-trigger" data-testimonial-index="2" aria-label="Buka preview testimoni 3">
+                            <img src="3.png" alt="Screenshot chat testimoni: Sudah dek dan makasih ya dek" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
+                            <span class="testimonial-zoom-icon" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
+                        </button>
+                    </article>
+
+                    <article class="testimonial-card reveal-item rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden">
+                        <button type="button" class="testimonial-lightbox-trigger" data-testimonial-index="3" aria-label="Buka preview testimoni 4">
+                            <img src="4.png" alt="Screenshot chat testimoni klien" loading="lazy" decoding="async" class="testimonial-image w-full h-auto object-contain">
+                            <span class="testimonial-zoom-icon" aria-hidden="true"><i class="fas fa-search-plus"></i></span>
+                        </button>
                     </article>
                 </div>
             </div>
@@ -287,11 +291,14 @@
             <div class="container mx-auto px-6 bg-gradient-to-br from-blue-700 to-cyan-700 rounded-[2.5rem] p-10 lg:p-24 text-center relative">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] contact-bg-pattern"></div>
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-black mb-10 relative z-10" data-key="contact_headline">LET'S WORK <br>TOGETHER 🚀</h2>
+                <p class="max-w-2xl mx-auto -mt-4 mb-10 text-white/80 text-base md:text-lg font-medium relative z-10" data-key="contact_intro">
+                    Ceritakan kebutuhan brand kamu, kami bantu arahin paket desain, video, atau website yang paling pas.
+                </p>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8 relative z-10">
-                    <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" class="contact-cta bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl" data-key="contact_whatsapp">WHATSAPP US</a>
+                    <a href="https://wa.me/6285609205193?text=Halo%20Dantha%2C%20saya%20mau%20konsultasi%20untuk%20website%2Fdesain." target="_blank" rel="noopener noreferrer" class="contact-cta bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:scale-105 transition active:scale-95 shadow-2xl" data-key="contact_whatsapp">Konsultasi via WhatsApp</a>
                     <div class="text-left">
                         <p class="text-white/70 text-sm uppercase font-bold tracking-widest" data-key="contact_follow_us">Follow Us</p>
-                        <a href="https://instagram.com/danthacreative" target="_blank" rel="noopener noreferrer" class="text-2xl font-bold">@danthacreative</a>
+                        <a href="https://instagram.com/dcreativelab.id" target="_blank" rel="noopener noreferrer" class="text-2xl font-bold">@dcreativelab.id</a>
                     </div>
                 </div>
             </div>
@@ -307,14 +314,34 @@
 
     <!-- Quick Contact Floating Buttons -->
     <div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
-        <a href="https://instagram.com/danthacreative" target="_blank" rel="noopener noreferrer" aria-label="Open Dantha Creative Instagram" class="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+        <a href="https://instagram.com/dcreativelab.id" target="_blank" rel="noopener noreferrer" aria-label="Open Dantha Creative Instagram" class="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
             <i class="fab fa-instagram text-2xl text-white" aria-hidden="true"></i>
-            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@danthacreative</span>
+            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">@dcreativelab.id</span>
         </a>
-        <a href="https://wa.me/6285609205193" target="_blank" rel="noopener noreferrer" aria-label="Chat Dantha Creative via WhatsApp" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
+        <a href="https://wa.me/6285609205193?text=Halo%20Dantha%2C%20saya%20mau%20konsultasi%20untuk%20website%2Fdesain." target="_blank" rel="noopener noreferrer" aria-label="Konsultasi Dantha Creative via WhatsApp" class="w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform group relative">
             <i class="fab fa-whatsapp text-3xl text-white" aria-hidden="true"></i>
-            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Chat via WhatsApp</span>
+            <span class="absolute right-16 bg-white text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Konsultasi via WhatsApp</span>
         </a>
+    </div>
+
+    <!-- Testimonial Lightbox -->
+    <div id="testimonial-lightbox" class="testimonial-lightbox is-hidden" role="dialog" aria-modal="true" aria-labelledby="testimonial-lightbox-caption" aria-hidden="true">
+        <button type="button" class="testimonial-lightbox-backdrop" aria-label="Tutup preview testimoni"></button>
+        <div class="testimonial-lightbox-panel">
+            <button type="button" class="testimonial-lightbox-close" aria-label="Tutup preview testimoni">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="testimonial-lightbox-nav testimonial-lightbox-prev" aria-label="Foto testimoni sebelumnya">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <figure class="testimonial-lightbox-figure">
+                <img id="testimonial-lightbox-image" src="1.png" alt="Screenshot chat testimoni: makasih dekk">
+                <figcaption id="testimonial-lightbox-caption">Testimoni 1 dari 4</figcaption>
+            </figure>
+            <button type="button" class="testimonial-lightbox-nav testimonial-lightbox-next" aria-label="Foto testimoni berikutnya">
+                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Background Music -->
@@ -357,17 +384,14 @@
                 testimonials_tag: "/ Apa Kata Mereka",
                 testimonials_title: "Bukti dari <span class='text-blue-600'>Chat Asli.</span>",
                 testimonials_intro: "Screenshot asli dari obrolan klien setelah file selesai dikirim. Simple, jujur, dan kerasa real-nya.",
-                testimonial_text_label: "Teks di foto",
-                testimonial_1_quote: "\"makasih dekk\"",
-                testimonial_2_quote: "\"Oke dek pas..\"",
-                testimonial_3_quote: "\"Sudah dek.. Makasih ya dek..\"",
                 portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
                 portfolio_project_kopi_title: "Kopi Kita",
                 portfolio_project_kopi_tag: "Website / 2026",
                 portfolio_project_raka_title: "Fit with Raka",
                 portfolio_project_raka_tag: "Website / 2026",
                 contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>",
-                contact_whatsapp: "WHATSAPP KAMI",
+                contact_intro: "Ceritakan kebutuhan brand kamu, kami bantu arahin paket desain, video, atau website yang paling pas.",
+                contact_whatsapp: "Konsultasi via WhatsApp",
                 contact_follow_us: "Ikuti Kami",
                 footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             },
@@ -391,17 +415,14 @@
                 testimonials_tag: "/ What They Say",
                 testimonials_title: "Proof from <span class='text-blue-600'>Real Chats.</span>",
                 testimonials_intro: "Original chat screenshots from clients after the files were delivered. Simple, honest, and it feels real.",
-                testimonial_text_label: "Text in the photo",
-                testimonial_1_quote: "\"makasih dekk\"",
-                testimonial_2_quote: "\"Oke dek pas..\"",
-                testimonial_3_quote: "\"Sudah dek.. Makasih ya dek..\"",
                 portfolio_title: "Selected <span class='text-blue-600'>Work.</span>",
                 portfolio_project_kopi_title: "Kopi Kita",
                 portfolio_project_kopi_tag: "Website / 2026",
                 portfolio_project_raka_title: "Fit with Raka",
                 portfolio_project_raka_tag: "Website / 2026",
                 contact_headline: "LET'S WORK <br>TOGETHER <span class='rocket-emoji inline-block'>🚀</span>",
-                contact_whatsapp: "WHATSAPP US",
+                contact_intro: "Tell us what your brand needs, and we will help choose the right design, video, or website package.",
+                contact_whatsapp: "Consult via WhatsApp",
                 contact_follow_us: "Follow Us",
                 footer_copyright: "&copy; 2026 DANTHA CREATIVE LAB. ALL RIGHTS RESERVED."
             }
@@ -470,7 +491,7 @@
             // Update Logo Image based on theme
             const logoImg = document.querySelector('.logo-img');
             if (logoImg) {
-                logoImg.src = theme === 'light' ? 'logo dantha creative dark.png' : 'logo dantha creative.png';
+                logoImg.src = theme === 'light' ? 'logo hitam.png' : 'logo putih.png';
             }
         }
 
@@ -537,10 +558,77 @@
         menuToggle.addEventListener('click', () => setMobileMenuOpen(mobileMenu.classList.contains('hidden')));
         mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileMenuOpen(false)));
 
+        function initTestimonialLightbox() {
+            const lightbox = document.getElementById('testimonial-lightbox');
+            if (!lightbox) return;
+
+            const triggers = Array.from(document.querySelectorAll('.testimonial-lightbox-trigger'));
+            const previewImage = document.getElementById('testimonial-lightbox-image');
+            const caption = document.getElementById('testimonial-lightbox-caption');
+            const closeButton = lightbox.querySelector('.testimonial-lightbox-close');
+            const closeTargets = lightbox.querySelectorAll('.testimonial-lightbox-close, .testimonial-lightbox-backdrop');
+            const prevButton = lightbox.querySelector('.testimonial-lightbox-prev');
+            const nextButton = lightbox.querySelector('.testimonial-lightbox-next');
+            const testimonials = triggers.map(trigger => {
+                const image = trigger.querySelector('img');
+                return {
+                    src: image.getAttribute('src'),
+                    alt: image.getAttribute('alt')
+                };
+            });
+
+            let activeIndex = 0;
+            let lastFocusedElement = null;
+
+            const setActiveTestimonial = (index) => {
+                activeIndex = (index + testimonials.length) % testimonials.length;
+                const testimonial = testimonials[activeIndex];
+                previewImage.setAttribute('src', testimonial.src);
+                previewImage.setAttribute('alt', testimonial.alt);
+                caption.textContent = `Testimoni ${activeIndex + 1} dari ${testimonials.length}`;
+            };
+
+            const openLightbox = (index) => {
+                lastFocusedElement = document.activeElement;
+                setActiveTestimonial(index);
+                lightbox.classList.remove('is-hidden');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('lightbox-open');
+                closeButton.focus();
+            };
+
+            const closeLightbox = () => {
+                lightbox.classList.add('is-hidden');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('lightbox-open');
+                if (lastFocusedElement) lastFocusedElement.focus();
+            };
+
+            triggers.forEach((trigger, index) => {
+                trigger.addEventListener('click', () => openLightbox(index));
+            });
+
+            closeTargets.forEach(target => {
+                target.addEventListener('click', closeLightbox);
+            });
+
+            prevButton.addEventListener('click', () => setActiveTestimonial(activeIndex - 1));
+            nextButton.addEventListener('click', () => setActiveTestimonial(activeIndex + 1));
+
+            document.addEventListener('keydown', (event) => {
+                if (lightbox.classList.contains('is-hidden')) return;
+
+                if (event.key === 'Escape') closeLightbox();
+                if (event.key === 'ArrowLeft') setActiveTestimonial(activeIndex - 1);
+                if (event.key === 'ArrowRight') setActiveTestimonial(activeIndex + 1);
+            });
+        }
+
         // Loader Animation
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             initLanguage();
+            initTestimonialLightbox();
             if (!supportsGsap) {
                 document.getElementById('loader').style.display = 'none';
                 revealStaticContent();
